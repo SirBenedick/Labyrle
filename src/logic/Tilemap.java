@@ -5,11 +5,27 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import logic.utility.Color;
+import logic.utility.Tile;
+import logic.utility.TileInformation;
+import logic.utility.TileType;
+
 /**
- * FILE FORMAT BYTE[2] "TQ" INT mapWidth INT mapHeight for x to width for y to
- * height INT type INT color INT target_color INT Start count For each start INT
- * x INT y BYTE[2] "TQ"
- * 
+ * 				FILE FORMAT 
+ * BYTE[2] "TQ" 
+ * INT mapWidth 
+ * INT mapHeight 
+ * for x to width for y to height 
+ *  	INT type
+ *  	INT color
+ *  	INT target_color 
+ *
+ *INT Start count 
+ *For each start 
+ *		INT x 
+ *		INT y 
+ *
+ *BYTE[2] "TQ"
  */
 public class Tilemap
 {
@@ -124,6 +140,9 @@ public class Tilemap
 
 	public void saveToFile(String path) throws Exception
 	{
+		if (!isValid())
+			throw new Exception("Tilemap is not valid!");
+		
 		OutputStream out = new FileOutputStream(path);
 
 		// Write identification string
@@ -184,8 +203,15 @@ public class Tilemap
 			throw new Exception("The labyrinth boundaries do not match the defaults.");
 		}
 		
+		for (int x = 0; x < width; x++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				//type color target
+				tiles[x][y] = new Tile(TileType.values()[in.read()], Color.values()[in.read()], Color.values()[in.read()]);
+			}
+		}
 		
-
 		// Read starting points
 		int startingPointCount = in.read();
 		if (startingPointCount < 0 || startingPointCount > 4)
@@ -206,6 +232,9 @@ public class Tilemap
 		}
 
 		in.close();
+		
+		if (!isValid())
+			throw new Exception("Tilemap is not valid!");
 	}
 
 	public static Tilemap makeTestMap()
