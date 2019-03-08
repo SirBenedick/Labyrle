@@ -24,4 +24,23 @@ public class TileInformation
 	{
 		return y;
 	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj == null)
+			 return false;
+		if (obj == this)
+			return true;
+		if (!(obj instanceof Tile))
+			return false;
+		TileInformation tileInfo = (TileInformation) obj;
+		if(!(this.tile.equals(tileInfo.tile)))
+			return false;
+		if(!(this.x == tileInfo.x))
+			return false;
+		if(!(this.y == tileInfo.y))
+			return false;
+		return true;
+	}
 }
