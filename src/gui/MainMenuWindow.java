@@ -93,7 +93,7 @@ public class MainMenuWindow extends Stage
             	event.consume();
             };
         });
-		
+		 
 		this.setScene(new Scene(contantPane));
 		this.setHeight(WINDOW_HEIGHT);
 		this.setWidth(WINDOW_WIDTH);
