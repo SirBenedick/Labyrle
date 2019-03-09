@@ -39,13 +39,12 @@ public class GameWindow extends Stage
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Spielabbruch");
  
-        alert.setHeaderText(null);
+        alert.setHeaderText("Es läuft momentan ein Spiel");
         alert.setContentText("Wollen Sie wirklich beenden?");
  
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get() == ButtonType.OK)
         	Platform.exit();
-        
     }
 	
 	private GridPane rootLayout;
@@ -56,12 +55,13 @@ public class GameWindow extends Stage
 	{
 		rootLayout = new GridPane();
 		
-		renderer = new TilemapRenderer(400, 400, new Tilemap());	
+		renderer = new TilemapRenderer(Defaults.TileSize*logic.Defaults.LabyrinthWidth, Defaults.TileSize*logic.Defaults.LabyrinthHeight, new Tilemap());	
 		rootLayout.add(renderer, 0, 0);
 		
-		mainScene = new Scene(rootLayout, 500, 500);
+		mainScene = new Scene(rootLayout, renderer.getWidth()+300, renderer.getHeight());
 		this.setScene(mainScene);
-		renderer.drawTest();
+		renderer.drawGrid();
+		this.sizeToScene();
 	}
 }
 

@@ -1,8 +1,10 @@
 package logic;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
@@ -83,6 +85,12 @@ public class GameState
         dir = new File(Defaults.LABYRINTH_DIRECTORY);
         if (!dir.exists())
         	(new File(Defaults.LABYRINTH_DIRECTORY)).mkdir();
+        
+        BufferedWriter out = new BufferedWriter(new FileWriter(Defaults.SYSTEM_PATH+"/"+"params.txt"));
+        out.write("The application supports following startup parameters: \n\n");
+        out.write("-setup (restores basics directories and creates a new save game)\n");
+        out.write("-editor (starts the map editor)");
+        out.close();
        
         save();
 	}

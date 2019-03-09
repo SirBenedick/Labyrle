@@ -3,8 +3,8 @@ package logic;
 public class Defaults
 {
 	//TODO name refactor.
-	public static final int LabyrinthWidth 			= 8;
-	public static final int LabyrinthHeight 		= 8;
+	public static final int LabyrinthWidth 			= 20;
+	public static final int LabyrinthHeight 		= 16;
 	
 	//1.5 Seconds before parts of the map render invisible
 	public static final int DELAY_BEFORE_HIDING_MAP = 1500;
