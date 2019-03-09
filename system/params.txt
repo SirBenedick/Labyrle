@@ -1,0 +1,4 @@
+The application supports following startup parameters: 
+
+-setup (restores basics directories and creates a new save game)
+-editor (starts the map editor)

@@ -25,6 +25,9 @@ import logic.utility.TileType;
  *		INT x 
  *		INT y 
  *
+ *INT x of end point
+ *INT y of end point
+ *
  *BYTE[2] "TQ"
  */
 public class Tilemap
@@ -51,6 +54,11 @@ public class Tilemap
 
 	public Tilemap()
 	{
+		clear();
+	}
+	
+	public void clear()
+	{
 		startingPoints = new TileInformation[4];
 		endPoint = null;
 
@@ -60,6 +68,22 @@ public class Tilemap
 			for (int y = 0; y < Defaults.LabyrinthHeight; y++)
 				tiles[x][y] = new Tile();
 		}
+		
+		//TOP
+		for (int x = 0; x < getWidth(); x++)
+			tiles[x][0].setType(TileType.WALL); 
+		
+		//Bottom
+		for (int x = 0; x < getWidth(); x++)
+			tiles[x][getHeight()-1].setType(TileType.WALL); 
+		
+		//LEFT
+		for (int y = 0; y < getHeight(); y++)
+			tiles[0][y].setType(TileType.WALL); 
+		
+		//RIGHT
+		for (int y = 0; y < getHeight(); y++)
+			tiles[getWidth()-1][y].setType(TileType.WALL); 
 	}
 
 	public int getStartingPointCount()
@@ -104,9 +128,10 @@ public class Tilemap
 		if (color == Color.NONE)
 			return;
 
-		removeStartingPoint(color);
+		removeEntity(x, y);
 
 		tiles[x][y].setColor(color);
+		tiles[x][y].setType(TileType.FREE);
 		startingPoints[color.ordinal()] = new TileInformation(tiles[x][y], x, y);
 	}
 
@@ -121,6 +146,45 @@ public class Tilemap
 		startingPoints[color.ordinal()].getTile().setColor(Color.NONE);
 		startingPoints[color.ordinal()] = null;
 	}
+	
+	/**
+	 * @param x position of tile
+	 * @param y position of tile
+	 * 
+	 * Removes any starting point, end point or pass point located on this tile.
+	 */
+	public void removeEntity(int xpos, int ypos)
+	{
+		//remove pass point
+		tiles[xpos][ypos].setTarget(Color.NONE);
+		
+		//Remove startpoint
+		for (int i = 0; i < startingPoints.length; i++)
+		{
+			if (startingPoints[i] == null)
+				continue;
+			
+			if (startingPoints[i].getX() == xpos && startingPoints[i].getY() == ypos)
+				removeStartingPoint(startingPoints[i].getTile().getColor());
+		}
+		
+		//Remove endpoint
+		if (endPoint == null)
+			return;
+		
+		if (endPoint.getX() == xpos && endPoint.getY() == ypos)
+			removeEndPoint();
+	}
+	
+	public TileInformation[] getStartPoints()
+	{
+		return startingPoints;
+	}
+	
+	public TileInformation getEndPoint()
+	{
+		return endPoint;
+	}
 
 	public Tile[][] getTiles()
 	{
@@ -129,7 +193,8 @@ public class Tilemap
 
 	public void setEndPoint(int x, int y)
 	{
-		removeEndPoint();
+		removeEntity(x, y);
+		tiles[x][y].setType(TileType.FREE);
 		endPoint = new TileInformation(tiles[x][y], x, y);
 	}
 
@@ -137,11 +202,19 @@ public class Tilemap
 	{
 		endPoint = null;
 	}
+	
+	public void setPassPoint(int x, int y, Color c)
+	{
+		removeEntity(x, y);
+		tiles[x][y].setType(TileType.FREE);
+		tiles[x][y].setColor(c);
+		tiles[x][y].setTarget(c);
+	}
 
 	public void saveToFile(String path) throws Exception
 	{
 		if (!isValid())
-			throw new Exception("Tilemap is not valid!");
+			throw new Exception("Tilemap is not valid! You are probably missing a start or an end point");
 		
 		OutputStream out = new FileOutputStream(path);
 
@@ -173,7 +246,11 @@ public class Tilemap
 			out.write(startingPoints[i].getX());
 			out.write(startingPoints[i].getY());
 		}
-
+		
+		// Write endpoint
+		out.write(endPoint.getX());
+		out.write(endPoint.getY());
+	
 		// Write map validation string
 		out.write(new byte[] { 'T', 'Q' });
 
@@ -222,6 +299,9 @@ public class Tilemap
 
 		for (int i = 0; i < startingPointCount; i++)
 			setStartingPoint(Color.values()[i], in.read(), in.read());
+		
+		//Read endpoint
+		setEndPoint(in.read(), in.read());
 
 		// Validate to be sure the correct amount of bytes have been read
 		in.read(validation_header);

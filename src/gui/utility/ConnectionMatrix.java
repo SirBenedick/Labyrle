@@ -19,7 +19,8 @@ public class ConnectionMatrix
 				boolean[][] matrix = collection[matrix_index];
 				//Check each specific matrix, using x and y as offset parameters
 				boolean matrix_fits = applyMatrix(matrix, absolute_x, absolute_y, map);
-				
+				if (matrix_fits)
+					return ConnectionType.values()[collection_index];
 			}
 		}
 		
@@ -30,6 +31,9 @@ public class ConnectionMatrix
 	{
 		boolean is_wall = map.getTiles()[absolute_x][absolute_y].getType() == TileType.WALL;
 		Color color = map.getTiles()[absolute_x][absolute_y].getColor();
+		
+		if (color == Color.NONE && !is_wall)
+			return false;
 		
 		for (int x = -1; x <= 1; x++ )
 		{
@@ -61,7 +65,7 @@ public class ConnectionMatrix
 						return false;
 				}
 				else
-				{
+				{		
 					if (map.getTiles()[tilemap_x][tilemap_y].getColor() != color)
 						return false;
 				}
