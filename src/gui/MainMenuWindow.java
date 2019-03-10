@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 
 public class MainMenuWindow extends Stage
 {
-	Pane contantPane;
 	final double SWITCH_WIDTH = 150;
 	final double SWITCH_HIGHT = 150;
 	final double WINDOW_HEIGHT = 650;
@@ -31,18 +30,46 @@ public class MainMenuWindow extends Stage
 	final double MANUAL_MAX_X = 520;
 	final double MANUAL_MIN_Y = 360;
 	final double MANUAL_MAX_Y = 430;
+	
 	private boolean switchOn = true;
+	private MainMenuWindow window;
+	
+	private Scene sceneMenu;
+	
+	private Scene sceneManual;
+	private int manualIndex;
+	private Background manualBackground[];
+	private Pane manualContentPane;
 	
 	public MainMenuWindow()
 	{
-		contantPane = new Pane();
+		window = this;
+		this.setHeight(WINDOW_HEIGHT);
+		this.setWidth(WINDOW_WIDTH);
+		this.setTitle("Labyrle");
+		this.setResizable(false);
+		this.getIcons().add(new Image("gfx/icon.png"));
+		initialiseMenuScene();
+		initilazieManualScene();
+		this.setScene(sceneMenu);
+	}
+	
+	private void initialiseMenuScene()
+	{
+		Pane menuContentPane = new Pane();
+		this.sceneMenu = new Scene(menuContentPane);
 		Background bg = new Background(new BackgroundImage(
-				new Image("gfx//Menu_ohne_Knopf.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, 
+				new Image("gfx/Menu_ohne_Knopf.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, 
 				new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)));
 		
-		contantPane.setBackground(bg);
+		menuContentPane.setBackground(bg);
 		Label switchButton = new Label();
-		switchButton.setGraphic(new ImageView(new Image("gfx//switchOn.png")));
+		
+		if(switchOn)
+			switchButton.setGraphic(new ImageView(new Image("gfx/switchOn.png")));
+		else
+			switchButton.setGraphic(new ImageView(new Image("gfx/switchOff.png")));
+		
 		switchButton.setMinSize(SWITCH_WIDTH, SWITCH_HIGHT);
 		switchButton.setMaxSize(SWITCH_WIDTH, SWITCH_HIGHT);
 		switchButton.setTranslateX(SWITCH_OFFSET_X);
@@ -60,22 +87,23 @@ public class MainMenuWindow extends Stage
             	
             	if(switchOn)
             	{
-            		switchButton.setGraphic(new ImageView(new Image("gfx//switchOff.png")));
+            		switchButton.setGraphic(new ImageView(new Image("gfx/switchOff.png")));
             		switchOn = false;
             	}
             	else
             	{
-            		switchButton.setGraphic(new ImageView(new Image("gfx//switchOn.png")));
+            		switchButton.setGraphic(new ImageView(new Image("gfx/switchOn.png")));
             		switchOn = true;
             	}
             	event.consume();
             };
         });
 		
-		contantPane.getChildren().add(switchButton);
+		menuContentPane.getChildren().add(switchButton);
 		
-		contantPane.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>()
+		menuContentPane.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>()
 		{
+			@Override
             public void handle(MouseEvent event)
             {
             	if (event.getButton() != MouseButton.PRIMARY)
@@ -88,18 +116,53 @@ public class MainMenuWindow extends Stage
             		System.out.println("Start");
             	//ToDo LevelSelectFenster
             	else if(event.getX() >= MANUAL_MIN_X && event.getX() <= MANUAL_MAX_X && event.getY() >= MANUAL_MIN_Y && event.getY() <= MANUAL_MAX_Y)
-            		System.out.println("Anleitung");
+            		window.setScene(window.sceneManual);
             	//ToDo Anleitungsfenster
             	event.consume();
             };
         });
-		 
-		this.setScene(new Scene(contantPane));
-		this.setHeight(WINDOW_HEIGHT);
-		this.setWidth(WINDOW_WIDTH);
-		this.setTitle("Labyrle");
-		this.setResizable(false);
-		this.getIcons().add(new Image("gfx//icon.png"));
+	}
+	
+	private void initilazieManualScene()
+	{
+		this.manualIndex = 0;
+		manualContentPane = new Pane();
+		this.sceneManual = new Scene(manualContentPane);
+		this.manualBackground = new Background[5];
+		for(int i = 0; i < manualBackground.length; i++)
+		{
+			manualBackground[i] = new Background(new BackgroundImage(
+					new Image("gfx/Manual_" + i + ".png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, 
+					new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true))); 
+		}
+		
+		manualContentPane.setBackground(manualBackground[this.manualIndex]);
+		
+		manualContentPane.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>()
+		{
+
+			@Override
+			public void handle(MouseEvent event)
+			{
+				
+				
+				if(event.getButton() == MouseButton.PRIMARY)
+					window.manualIndex++;
+				else if(event.getButton() == MouseButton.SECONDARY)
+					window.manualIndex--;
+				
+				if(window.manualIndex < 0 || window.manualIndex > 4)
+				{
+					window.manualIndex = 0;
+					window.manualContentPane.setBackground(window.manualBackground[window.manualIndex]);
+					window.setScene(window.sceneMenu);
+				}
+				else 
+					window.manualContentPane.setBackground(window.manualBackground[window.manualIndex]);
+				
+				event.consume();
+			}
+		});
 	}
 }
 
