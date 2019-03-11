@@ -188,11 +188,15 @@ public class Tilemap
 	{
 		if (color == Color.NONE)
 			return;
+		
+		if (startingPoints[color.ordinal()] != null)
+			removeEntity(startingPoints[color.ordinal()] .getX(), startingPoints[color.ordinal()].getY());
 
 		removeEntity(x, y);
 
 		tiles[x][y].setColor(color);
 		tiles[x][y].setType(TileType.FREE);
+		
 		startingPoints[color.ordinal()] = new TileInformation(tiles[x][y], x, y);
 	}
 
@@ -218,6 +222,9 @@ public class Tilemap
 	{
 		//remove pass point
 		tiles[xpos][ypos].setTarget(Color.NONE);
+		
+		//remove color
+		tiles[xpos][ypos].setColor(Color.NONE);
 		
 		//Remove startpoint
 		for (int i = 0; i < startingPoints.length; i++)
