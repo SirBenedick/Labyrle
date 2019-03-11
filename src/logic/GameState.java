@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 
 /*
  * 			FILE FORMAT
@@ -20,21 +19,28 @@ public class GameState
 	/*
 	 * All levels up to this level are getting unlocked.
 	 */
-	private int unlockedLevel;
+	private static int unlockedLevel;
 	
 	/*
 	 * Holds current settings. Keep in mind that they might be invalid!
 	 */
-	private Settings currentSettings;
+	private static Settings currentSettings;
 	
-	public GameState()
+	public static void reset()
 	{
 		unlockedLevel = 1;
 		currentSettings = new Settings();
 	}
 	
-	private void loadFromFile(String path) throws Exception
+	public static Settings getSettings()
 	{
+		return currentSettings;
+	}
+	
+	private static void loadFromFile(String path) throws Exception
+	{
+		reset();
+		
 		InputStream in = new FileInputStream(path);
 		byte[] ident = new byte[2];
 		
@@ -60,7 +66,7 @@ public class GameState
 		in.close();
 	}
 	
-	private void saveToFile(String path) throws Exception
+	private static void saveToFile(String path) throws Exception
 	{
 		OutputStream out = new FileOutputStream(path);
 		
@@ -71,12 +77,12 @@ public class GameState
 		out.close();
 	}
 	
-	public int getUnlockedLevel()
+	public static int getUnlockedLevel()
 	{
 		return unlockedLevel;
 	}
 	
-	public void restoreSystem() throws Exception
+	public static void restoreSystem() throws Exception
 	{
 		File dir = new File(Defaults.SYSTEM_PATH);
         if (!dir.exists())
@@ -95,25 +101,13 @@ public class GameState
         save();
 	}
 	
-	public void save() throws Exception
+	public static void save() throws Exception
 	{
         saveToFile(Defaults.SYSTEM_PATH+"/"+Defaults.SAVE_GAME_FILE);
 	}
 	
-	public void load() throws Exception
+	public static void load() throws Exception
 	{
 		loadFromFile(Defaults.SYSTEM_PATH+"/"+Defaults.SAVE_GAME_FILE);
-	}
-	
-	public List<String> listAllMaps()
-	{
-		//TODO
-		return null;
-	}
-	
-	public List<String> listAvailableMaps()
-	{
-		//TODO
-		return null;
 	}
 }

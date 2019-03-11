@@ -28,16 +28,34 @@ public class Core extends Application
 	public void start(Stage primaryStage)
 	{
 		boolean run_editor = false;
+		try
+		{
+			GameState.load();
+		}
+		catch(Exception e)
+		{
+			try
+			{
+				GameState.restoreSystem();
+				GameState.save();
+				GameState.load();
+			}
+			catch(Exception ex)
+			{
+				dialogMsg("Could not load save game.", "Error", ex.getMessage(), AlertType.ERROR);
+				Platform.exit();
+				return;
+			}
+		}
 		
 		if (programArguments.size() > 0)
 		{
 			//Check if we should restore our system
 			if (programArguments.contains("-setup"))
 			{
-				logic.GameState state = new logic.GameState();
 				try
 				{
-					state.restoreSystem();
+					GameState.restoreSystem();
 					dialogMsg("Setup done", "yeah we did it. The system is running111!11!", null, AlertType.INFORMATION);
 				}
 				catch(Exception e)
