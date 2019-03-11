@@ -30,7 +30,6 @@ public class MainMenuWindow extends Stage
 	private final double MANUAL_MAX_X = 520;
 	private final double MANUAL_MIN_Y = 360;
 	private final double MANUAL_MAX_Y = 430;
-	private final int MAX_MANUAL_PAGES = 5;
 	
 	private boolean switchOn = true;
 	private MainMenuWindow window;
@@ -129,7 +128,7 @@ public class MainMenuWindow extends Stage
 		this.manualIndex = 0;
 		manualContentPane = new Pane();
 		this.sceneManual = new Scene(manualContentPane);
-		this.manualBackground = new Background[window.MAX_MANUAL_PAGES];
+		this.manualBackground = new Background[5];
 		for(int i = 0; i < manualBackground.length; i++)
 		{
 			manualBackground[i] = new Background(new BackgroundImage(
@@ -152,7 +151,7 @@ public class MainMenuWindow extends Stage
 				else if(event.getButton() == MouseButton.SECONDARY)
 					window.manualIndex--;
 				
-				if(window.manualIndex < 0 || window.manualIndex > window.MAX_MANUAL_PAGES - 1)
+				if(window.manualIndex < 0 || window.manualIndex > manualBackground.length - 1)
 				{
 					window.manualIndex = 0;
 					window.manualContentPane.setBackground(window.manualBackground[window.manualIndex]);
