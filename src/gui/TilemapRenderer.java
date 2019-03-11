@@ -19,12 +19,16 @@ public class TilemapRenderer extends Canvas
 	private ConnectionType[][] typeMatrix;
 	private boolean showGrid;
 	
+	private int tileSize;
+	
 	private int selectedTileX, oldX;
 	private int selectedTileY, oldY;
-
+	
 	public TilemapRenderer(int width, int height, Tilemap map)
 	{
 		super(width, height);
+		
+		tileSize = Defaults.TILE_SIZE;
 		
 		context = getGraphicsContext2D();
 		showGrid = false;
@@ -50,6 +54,16 @@ public class TilemapRenderer extends Canvas
 		});
 	}
 	
+	public int getTileSize()
+	{
+		return tileSize;
+	}
+	
+	public void setTileSize(int value)
+	{
+		tileSize = value;
+	}
+	
 	public void setTilemap(Tilemap map)
 	{
 		this.map = map;
@@ -64,8 +78,8 @@ public class TilemapRenderer extends Canvas
 	
 	private void handleMove(MouseEvent e, boolean forceRedrawOnValidCoordinates)
 	{
-		selectedTileX = (int)e.getX() / Defaults.TILE_SIZE;
-		selectedTileY = (int)e.getY() / Defaults.TILE_SIZE;
+		selectedTileX = (int)e.getX() / tileSize;
+		selectedTileY = (int)e.getY() / tileSize;
 		
 		//There is no change
 		if (oldX == selectedTileX && oldY == selectedTileY)
@@ -148,47 +162,47 @@ public class TilemapRenderer extends Canvas
 					continue;
 				
 				Tile t = map.getTiles()[x][y];
-				int absx = x*Defaults.TILE_SIZE;
-				int absy = y*Defaults.TILE_SIZE;
+				int absx = x*tileSize;
+				int absy = y*tileSize;
 				if (t.getType() == TileType.WALL)
 				{
 					switch(typeMatrix[x][y])
 					{
 					case HORIZONTAL:
-						context.drawImage(gfx.Manager.getWallLineHorizontal(), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getWallLineHorizontal(), absx, absy, tileSize, tileSize);
 						break;
 					case VERTICAL:
-						context.drawImage(gfx.Manager.getWallLineVertical(), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getWallLineVertical(), absx, absy, tileSize, tileSize);
 						break;
 					case JUNCTION:
-						context.drawImage(gfx.Manager.getWallJunction(), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getWallJunction(), absx, absy, tileSize, tileSize);
 						break;
 					case LEFT_TO_BOTTOM:
-						context.drawImage(gfx.Manager.getWallTurnBottomLeft(), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getWallTurnBottomLeft(), absx, absy, tileSize, tileSize);
 						break;
 					case LEFT_TO_TOP:
-						context.drawImage(gfx.Manager.getWallTurnTopLeft(), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getWallTurnTopLeft(), absx, absy, tileSize, tileSize);
 						break;
 					case NONE:
-						context.drawImage(gfx.Manager.getWallNone(), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getWallNone(), absx, absy, tileSize, tileSize);
 						break;
 					case RIGHT_TO_BOTTOM:
-						context.drawImage(gfx.Manager.getWallTurnBottomRight(), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getWallTurnBottomRight(), absx, absy, tileSize, tileSize);
 						break;
 					case RIGHT_TO_TOP:
-						context.drawImage(gfx.Manager.getWallTurnTopRight(), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getWallTurnTopRight(), absx, absy, tileSize, tileSize);
 						break;
 					case T_JUNCTION_BOTTOM:
-						context.drawImage(gfx.Manager.getWallTJunctionBottom(), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getWallTJunctionBottom(), absx, absy, tileSize, tileSize);
 						break;
 					case T_JUNCTION_LEFT:
-						context.drawImage(gfx.Manager.getWallTJunctionLeft(), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getWallTJunctionLeft(), absx, absy, tileSize, tileSize);
 						break;
 					case T_JUNCTION_RIGHT:
-						context.drawImage(gfx.Manager.getWallTJunctionRight(), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getWallTJunctionRight(), absx, absy, tileSize, tileSize);
 						break;
 					case T_JUNCTION_TOP:
-						context.drawImage(gfx.Manager.getWallTJunctionTop(), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getWallTJunctionTop(), absx, absy, tileSize, tileSize);
 						break;
 					default:
 						break;
@@ -201,40 +215,40 @@ public class TilemapRenderer extends Canvas
 					switch(typeMatrix[x][y])
 					{
 					case HORIZONTAL:
-						context.drawImage(gfx.Manager.getLineLineHorizontal(color), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getLineLineHorizontal(color), absx, absy, tileSize, tileSize);
 						break;
 					case VERTICAL:
-						context.drawImage(gfx.Manager.getLineLineVertical(color), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getLineLineVertical(color), absx, absy, tileSize, tileSize);
 						break;
 					case JUNCTION:
-						context.drawImage(gfx.Manager.getLineJunction(color), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getLineJunction(color), absx, absy, tileSize, tileSize);
 						break;
 					case LEFT_TO_BOTTOM:
-						context.drawImage(gfx.Manager.getLineTurnBottomLeft(color), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getLineTurnBottomLeft(color), absx, absy, tileSize, tileSize);
 						break;
 					case LEFT_TO_TOP:
-						context.drawImage(gfx.Manager.getLineTurnTopLeft(color), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getLineTurnTopLeft(color), absx, absy, tileSize, tileSize);
 						break;
 					case NONE:
-						context.drawImage(gfx.Manager.getLineNone(color), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getLineNone(color), absx, absy, tileSize, tileSize);
 						break;
 					case RIGHT_TO_BOTTOM:
-						context.drawImage(gfx.Manager.getLineTurnBottomRight(color), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getLineTurnBottomRight(color), absx, absy, tileSize, tileSize);
 						break;
 					case RIGHT_TO_TOP:
-						context.drawImage(gfx.Manager.getLineTurnTopRight(color), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getLineTurnTopRight(color), absx, absy, tileSize, tileSize);
 						break;
 					case T_JUNCTION_BOTTOM:
-						context.drawImage(gfx.Manager.getLineTJunctionBottom(color), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getLineTJunctionBottom(color), absx, absy, tileSize, tileSize);
 						break;
 					case T_JUNCTION_LEFT:
-						context.drawImage(gfx.Manager.getLineTJunctionLeft(color), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getLineTJunctionLeft(color), absx, absy, tileSize, tileSize);
 						break;
 					case T_JUNCTION_RIGHT:
-						context.drawImage(gfx.Manager.getLineTJunctionRight(color), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getLineTJunctionRight(color), absx, absy, tileSize, tileSize);
 						break;
 					case T_JUNCTION_TOP:
-						context.drawImage(gfx.Manager.getLineTJunctionTop(color), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+						context.drawImage(gfx.Manager.getLineTJunctionTop(color), absx, absy, tileSize, tileSize);
 						break;
 					default:
 						break;
@@ -242,7 +256,7 @@ public class TilemapRenderer extends Canvas
 				}
 				
 				if (t.getTarget() != logic.utility.Color.NONE)
-					context.drawImage(gfx.Manager.getPassPoint(t.getTarget()), absx, absy, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+					context.drawImage(gfx.Manager.getPassPoint(t.getTarget()), absx, absy, tileSize, tileSize);
 			}
 		}
 	}
@@ -260,7 +274,7 @@ public class TilemapRenderer extends Canvas
 		//Draw Endpoint
 		TileInformation endPoint = map.getEndPoint();
 		if (endPoint != null)
-			context.drawImage(gfx.Manager.getEndPoint(), endPoint.getX()*Defaults.TILE_SIZE, endPoint.getY()*Defaults.TILE_SIZE, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+			context.drawImage(gfx.Manager.getEndPoint(), endPoint.getX()*tileSize, endPoint.getY()*tileSize, tileSize, tileSize);
 		
 		//Draw all starting points
 		TileInformation[] startPoints = map.getStartPoints();
@@ -269,7 +283,7 @@ public class TilemapRenderer extends Canvas
 			if (startPoints[i] == null)
 				continue;
 			
-			context.drawImage(gfx.Manager.getStartPoint(startPoints[i].getTile().getColor()), startPoints[i].getX()*Defaults.TILE_SIZE, startPoints[i].getY()*Defaults.TILE_SIZE, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+			context.drawImage(gfx.Manager.getStartPoint(startPoints[i].getTile().getColor()), startPoints[i].getX()*tileSize, startPoints[i].getY()*tileSize, tileSize, tileSize);
 		}
 		
 		context.restore();
@@ -290,16 +304,16 @@ public class TilemapRenderer extends Canvas
 				
 				
 				context.setFill(Color.color(c.getRed(), c.getGreen(), c.getBlue(), 0.35));
-				int xabs = x * Defaults.TILE_SIZE;
-				int yabs = y * Defaults.TILE_SIZE;
-				context.fillRect(xabs, yabs, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+				int xabs = x * tileSize;
+				int yabs = y * tileSize;
+				context.fillRect(xabs, yabs, tileSize, tileSize);
 			}
 		}
 		
 		context.setFill(Color.RED);
 		context.setStroke(Color.RED);
 		context.setLineWidth(1);
-		context.strokeRect(selectedTileX*Defaults.TILE_SIZE, selectedTileY*Defaults.TILE_SIZE, Defaults.TILE_SIZE, Defaults.TILE_SIZE);
+		context.strokeRect(selectedTileX*tileSize, selectedTileY*tileSize, tileSize, tileSize);
 		context.restore();
 	}
 }
