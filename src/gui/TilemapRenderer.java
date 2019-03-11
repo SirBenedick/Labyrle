@@ -24,10 +24,13 @@ public class TilemapRenderer extends Canvas
 	private int selectedTileX, oldX;
 	private int selectedTileY, oldY;
 	
+	private boolean isBlocked;
+	
 	public TilemapRenderer(int width, int height, Tilemap map)
 	{
 		super(width, height);
 		
+		isBlocked = false;
 		tileSize = Defaults.TILE_SIZE;
 		
 		context = getGraphicsContext2D();
@@ -52,6 +55,8 @@ public class TilemapRenderer extends Canvas
 		{
 			handleMove(e, true);
 		});
+		
+		drawMap();
 	}
 	
 	public int getTileSize()
@@ -62,6 +67,16 @@ public class TilemapRenderer extends Canvas
 	public void setTileSize(int value)
 	{
 		tileSize = value;
+	}
+	
+	public boolean isBlocked()
+	{
+		return isBlocked;
+	}
+	
+	public void setBlocked(boolean value)
+	{
+		isBlocked = value;
 	}
 	
 	public void setTilemap(Tilemap map)
@@ -78,6 +93,9 @@ public class TilemapRenderer extends Canvas
 	
 	private void handleMove(MouseEvent e, boolean forceRedrawOnValidCoordinates)
 	{
+		if (isBlocked)
+			return;
+		
 		selectedTileX = (int)e.getX() / tileSize;
 		selectedTileY = (int)e.getY() / tileSize;
 		
@@ -103,6 +121,7 @@ public class TilemapRenderer extends Canvas
 		oldX = selectedTileX;
 		oldY = selectedTileY;
 	
+		resolveAllConnectionTypes();
 		drawMap();
 	}
 	
