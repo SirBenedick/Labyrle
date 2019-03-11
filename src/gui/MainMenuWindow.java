@@ -13,6 +13,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import logic.GameState;
 
 public class MainMenuWindow extends Stage
 {
@@ -41,6 +42,8 @@ public class MainMenuWindow extends Stage
 	private Background manualBackground[];
 	private Pane manualContentPane;
 	
+	private Scene sceneLevelSelect;
+	
 	public MainMenuWindow()
 	{
 		window = this;
@@ -51,6 +54,7 @@ public class MainMenuWindow extends Stage
 		this.getIcons().add(new Image("gfx/icon.png"));
 		initialiseMenuScene();
 		initilazieManualScene();
+		initilazieLevelSelectScene();
 		this.setScene(sceneMenu);
 	}
 	
@@ -66,9 +70,15 @@ public class MainMenuWindow extends Stage
 		Label switchButton = new Label();
 		
 		if(switchOn)
+		{
 			switchButton.setGraphic(new ImageView(new Image("gfx/switchOn.png")));
+			GameState.getSettings().setShadowOpacity(1.0f);
+		}
 		else
+		{
 			switchButton.setGraphic(new ImageView(new Image("gfx/switchOff.png")));
+			GameState.getSettings().setShadowOpacity(0.0f);
+		}
 		
 		switchButton.setMinSize(SWITCH_WIDTH, SWITCH_HIGHT);
 		switchButton.setMaxSize(SWITCH_WIDTH, SWITCH_HIGHT);
@@ -88,11 +98,13 @@ public class MainMenuWindow extends Stage
             	if(switchOn)
             	{
             		switchButton.setGraphic(new ImageView(new Image("gfx/switchOff.png")));
+            		GameState.getSettings().setShadowOpacity(0.0f);
             		switchOn = false;
             	}
             	else
             	{
             		switchButton.setGraphic(new ImageView(new Image("gfx/switchOn.png")));
+            		GameState.getSettings().setShadowOpacity(1.0f);
             		switchOn = true;
             	}
             	event.consume();
@@ -113,8 +125,7 @@ public class MainMenuWindow extends Stage
             	}
             	
             	if(event.getX() >= START_MIN_X && event.getX() <= START_MAX_X && event.getY() >= START_MIN_Y && event.getY() <= START_MAX_Y)
-            		System.out.println("Start");
-            	//ToDo LevelSelectFenster
+            		window.setScene(window.sceneLevelSelect);
             	else if(event.getX() >= MANUAL_MIN_X && event.getX() <= MANUAL_MAX_X && event.getY() >= MANUAL_MIN_Y && event.getY() <= MANUAL_MAX_Y)
             		window.setScene(window.sceneManual);
             	
@@ -160,6 +171,26 @@ public class MainMenuWindow extends Stage
 				else 
 					window.manualContentPane.setBackground(window.manualBackground[window.manualIndex]);
 				
+				event.consume();
+			}
+		});
+	}
+	
+	private void initilazieLevelSelectScene()
+	{
+		Pane levelSelectPane = new Pane();
+		this.sceneLevelSelect = new Scene(levelSelectPane);
+		levelSelectPane.setBackground(new Background(new BackgroundImage(
+				new Image("gfx/background_game.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, 
+				new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true))));
+		
+		levelSelectPane.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>()
+		{
+
+			@Override
+			public void handle(MouseEvent event)
+			{
+				window.setScene(window.sceneMenu);
 				event.consume();
 			}
 		});
