@@ -67,7 +67,7 @@ public class Core extends Application
 		if (run_editor)
 			new MapEditorWindow().show();
 		else
-			new GameWindow().show();
+			new MainMenuWindow().show();
 	}
 
 	//TODO ERROR HANDLING
