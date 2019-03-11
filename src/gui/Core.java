@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import logic.GameState;
 
 public class Core extends Application
 {

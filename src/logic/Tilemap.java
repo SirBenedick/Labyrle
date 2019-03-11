@@ -57,6 +57,29 @@ public class Tilemap
 		clear();
 	}
 	
+	public void setTileColor(int x, int y, Color c)
+	{
+		//Do not draw if there is an entity
+		if (isEntity(x, y))
+			return;
+		
+		if (tiles[x][y].getType() == TileType.WALL)
+			return;
+		
+		if (tiles[x][y].getColor() != Color.NONE)
+			return;
+		
+		tiles[x][y].setColor(c);
+	}
+	
+	public void removeTileColor(int x, int y)
+	{
+		if (isEntity(x, y))
+			return;
+		
+		tiles[x][y].setColor(Color.NONE);
+	}
+	
 	public void clear()
 	{
 		startingPoints = new TileInformation[4];
@@ -85,6 +108,20 @@ public class Tilemap
 		for (int y = 0; y < getHeight(); y++)
 			tiles[getWidth()-1][y].setType(TileType.WALL); 
 	}
+	
+	public boolean isStartPoint(int x, int y)
+	{
+		for (int i = 0; i < startingPoints.length; i++)
+		{
+			if (startingPoints[i] == null)
+				continue;
+			
+			if (startingPoints[i].getX() == x && startingPoints[i].getY() == y)
+				return true;
+		}
+		
+		return false;
+	}
 
 	public int getStartingPointCount()
 	{
@@ -96,6 +133,30 @@ public class Tilemap
 		}
 
 		return count;
+	}
+	
+	public boolean isEntity(int x, int y)
+	{	
+		if (tiles[x][y].getTarget() != Color.NONE)
+			return true;
+		
+		for (int i = 0; i < startingPoints.length; i++)
+		{
+			if (startingPoints[i] == null)
+				continue;
+			
+			if (startingPoints[i].getX() == x && startingPoints[i].getY() == y)
+				return true;
+		}
+		
+		//Remove endpoint
+		if (endPoint == null)
+			return false;
+		
+		if (endPoint.getX() == x && endPoint.getY() == y)
+			return true;
+				
+		return false;
 	}
 
 	public boolean hasStartingPoint()
