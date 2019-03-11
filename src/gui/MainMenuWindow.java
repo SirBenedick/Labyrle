@@ -16,20 +16,21 @@ import javafx.stage.Stage;
 
 public class MainMenuWindow extends Stage
 {
-	final double SWITCH_WIDTH = 150;
-	final double SWITCH_HIGHT = 150;
-	final double WINDOW_HEIGHT = 650;
-	final double WINDOW_WIDTH = 825;
-	final double SWITCH_OFFSET_X = 550;
-	final double SWITCH_OFFSET_Y = 350;
-	final double START_MIN_X = 140;
-	final double START_MAX_X = 280;
-	final double START_MIN_Y = 350;
-	final double START_MAX_Y = 425;
-	final double MANUAL_MIN_X = 315;
-	final double MANUAL_MAX_X = 520;
-	final double MANUAL_MIN_Y = 360;
-	final double MANUAL_MAX_Y = 430;
+	private final double SWITCH_WIDTH = 150;
+	private final double SWITCH_HIGHT = 150;
+	private final double WINDOW_HEIGHT = 650;
+	private final double WINDOW_WIDTH = 825;
+	private final double SWITCH_OFFSET_X = 550;
+	private final double SWITCH_OFFSET_Y = 350;
+	private final double START_MIN_X = 140;
+	private final double START_MAX_X = 280;
+	private final double START_MIN_Y = 350;
+	private final double START_MAX_Y = 425;
+	private final double MANUAL_MIN_X = 315;
+	private final double MANUAL_MAX_X = 520;
+	private final double MANUAL_MIN_Y = 360;
+	private final double MANUAL_MAX_Y = 430;
+	private final int MAX_MANUAL_PAGES = 5;
 	
 	private boolean switchOn = true;
 	private MainMenuWindow window;
@@ -117,7 +118,7 @@ public class MainMenuWindow extends Stage
             	//ToDo LevelSelectFenster
             	else if(event.getX() >= MANUAL_MIN_X && event.getX() <= MANUAL_MAX_X && event.getY() >= MANUAL_MIN_Y && event.getY() <= MANUAL_MAX_Y)
             		window.setScene(window.sceneManual);
-            	//ToDo Anleitungsfenster
+            	
             	event.consume();
             };
         });
@@ -128,7 +129,7 @@ public class MainMenuWindow extends Stage
 		this.manualIndex = 0;
 		manualContentPane = new Pane();
 		this.sceneManual = new Scene(manualContentPane);
-		this.manualBackground = new Background[5];
+		this.manualBackground = new Background[window.MAX_MANUAL_PAGES];
 		for(int i = 0; i < manualBackground.length; i++)
 		{
 			manualBackground[i] = new Background(new BackgroundImage(
@@ -151,7 +152,7 @@ public class MainMenuWindow extends Stage
 				else if(event.getButton() == MouseButton.SECONDARY)
 					window.manualIndex--;
 				
-				if(window.manualIndex < 0 || window.manualIndex > 4)
+				if(window.manualIndex < 0 || window.manualIndex > window.MAX_MANUAL_PAGES - 1)
 				{
 					window.manualIndex = 0;
 					window.manualContentPane.setBackground(window.manualBackground[window.manualIndex]);
