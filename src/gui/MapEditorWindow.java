@@ -26,6 +26,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import logic.Tilemap;
+import logic.utility.Color;
 import logic.utility.TileType;
 
 public class MapEditorWindow extends Stage
@@ -93,7 +94,7 @@ public class MapEditorWindow extends Stage
 		rootLayout.add(rightLayout, 1, 0);
 		
 		//Displays the map, is hooked with events in the end of this constructor
-		renderer = new TilemapRenderer(Defaults.TileSize*logic.Defaults.LabyrinthWidth, Defaults.TileSize*logic.Defaults.LabyrinthHeight, new Tilemap());	
+		renderer = new TilemapRenderer(Defaults.TILE_SIZE*logic.Defaults.LabyrinthWidth, Defaults.TILE_SIZE*logic.Defaults.LabyrinthHeight, new Tilemap());	
 		rootLayout.add(renderer, 0, 0);
 		
 		// PAINT MODE

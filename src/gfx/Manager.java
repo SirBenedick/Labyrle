@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 public class Manager 
 {
 	private static BackgroundImage backgroundImageGame;
+	
 	private static Image wallJunction;
 	private static Image wallLineVertical;
 	private static Image wallLineHorizontal;
@@ -28,26 +29,80 @@ public class Manager
 	private static Image wallTurnBottomRight;
 	private static Image wallTurnBottomLeft;
 	private static Image wallNone;
+	
+	private static Image[] lineJunction;
+	private static Image[] lineLineVertical;
+	private static Image[] lineLineHorizontal;
+	private static Image[] lineTJunctionRight;
+	private static Image[] lineTJunctionLeft;
+	private static Image[] lineTJunctionTop;
+	private static Image[] lineTJunctionBottom;
+	private static Image[] lineTurnTopRight;
+	private static Image[] lineTurnTopLeft;
+	private static Image[] lineTurnBottomRight;
+	private static Image[] lineTurnBottomLeft;
+	private static Image[] lineNone;
+	
+	
 	private static Image endPoint;
 
 	//Multi Color Images
-	private static Image passPoint;
-	private static Image startPoint;
+	private static Image[] passPoint;
+	private static Image[] startPoint;
 	
 	public static void loadImages() throws Exception
 	{
 		backgroundImageGame = new BackgroundImage( new Image("gfx/background_game.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-		wallJunction = new Image("gfx/wall_cross.png");
-		wallLineVertical = new Image("gfx/wall_line.png");
-		wallTJunctionRight = new Image("gfx/wall_tjunction.png");
-		wallTurnTopRight = new Image("gfx/wall_turn.png");
-		wallNone = new Image("gfx/wall_none.png");
-		passPoint = new Image("gfx/passpoint.png");
+		
+		wallJunction = colorize(new Image("gfx/wall_cross.png"), gui.Defaults.WALL_COLOR);
+		wallLineVertical = colorize(new Image("gfx/wall_line.png"), gui.Defaults.WALL_COLOR);
+		wallTJunctionRight = colorize(new Image("gfx/wall_tjunction.png"), gui.Defaults.WALL_COLOR);
+		wallTurnTopRight = colorize(new Image("gfx/wall_turn.png"), gui.Defaults.WALL_COLOR);
+		wallNone = colorize(new Image("gfx/wall_none.png"), gui.Defaults.WALL_COLOR);
+		
 		endPoint = new Image("gfx/endpoint.png");
 		
-		startPoint = new Image("gfx/startpoint.png");
+		//Create colorized variations
+		Image passpoint_temp = new Image("gfx/passpoint.png");
+		Image startpoint_temp = new Image("gfx/startpoint.png");
+		passPoint = new Image[4];
+		startPoint = new Image[4];
 		
-		//Variations
+		lineJunction = new Image[4];
+		lineLineVertical = new Image[4];
+		lineLineHorizontal = new Image[4];
+		lineTJunctionRight = new Image[4];
+		lineTJunctionLeft = new Image[4];
+		lineTJunctionTop = new Image[4];
+		lineTJunctionBottom = new Image[4];
+		lineTurnTopRight = new Image[4];
+		lineTurnTopLeft = new Image[4];
+		lineTurnBottomRight = new Image[4];
+		lineTurnBottomLeft = new Image[4];
+		lineNone = new Image[4];
+		
+		for (int i = 0; i < 4; i++)
+		{
+			passPoint[i] = colorize(passpoint_temp, gui.Defaults.COLOR_TABLE[i]);
+			startPoint[i] = colorize(startpoint_temp, gui.Defaults.COLOR_TABLE[i]);
+			lineJunction[i] = colorize(new Image("gfx/line_cross.png") ,gui.Defaults.COLOR_TABLE[i]);
+			lineLineVertical[i] = colorize(new Image("gfx/line_line.png") ,gui.Defaults.COLOR_TABLE[i]);
+			lineTJunctionRight[i] = colorize(new Image("gfx/line_tjunction.png") ,gui.Defaults.COLOR_TABLE[i]);
+			lineTurnTopRight[i] = colorize(new Image("gfx/line_turn.png") ,gui.Defaults.COLOR_TABLE[i]);
+			lineNone[i] = colorize(new Image("gfx/line_none.png") ,gui.Defaults.COLOR_TABLE[i]);
+			
+			lineLineHorizontal[i] = rotate(lineLineVertical[i], 90);
+			
+			lineTJunctionLeft[i] = rotate(lineTJunctionRight[i], 180);
+			lineTJunctionTop[i] = rotate(lineTJunctionRight[i], -90);
+			lineTJunctionBottom[i] = rotate(lineTJunctionRight[i], 90);
+			
+			lineTurnTopLeft[i] = rotate(lineTurnTopRight[i], -90);
+			lineTurnBottomRight[i] = rotate(lineTurnTopRight[i], 90);
+			lineTurnBottomLeft[i] = rotate(lineTurnTopRight[i], 180);
+		}
+		
+		//Wall Variations
 		wallLineHorizontal = rotate(wallLineVertical, 90);
 		
 		wallTJunctionLeft = rotate(wallTJunctionRight, 180);
@@ -70,12 +125,12 @@ public class Manager
 	
 	public static Image getStartPoint(logic.utility.Color color)
 	{
-		return colorize(startPoint, gui.Defaults.COLOR_TABLE[color.ordinal()]);
+		return startPoint[color.ordinal()];
 	}
 	
 	public static Image getPassPoint(logic.utility.Color color)
 	{
-		return colorize(passPoint, gui.Defaults.COLOR_TABLE[color.ordinal()]);
+		return passPoint[color.ordinal()];
 	}
 	
 	private static Image colorize(Image image, Color color)
@@ -109,6 +164,10 @@ public class Manager
 	{
 		return endPoint;
 	}
+	
+	/*
+	 * WALLS
+	 */
 	
 	public static Image getWallTurnTopLeft()
 	{
@@ -173,5 +232,73 @@ public class Manager
 	public static Image getWallNone()
 	{
 		return wallNone;
+	}
+	
+	/*
+	 * LINES
+	 */
+	public static Image getLineTurnTopLeft(logic.utility.Color color)
+	{
+		return lineTurnTopLeft[color.ordinal()];
+	}
+	
+	public static Image getLineTurnTopRight(logic.utility.Color color)
+	{
+		return lineTurnTopRight[color.ordinal()];
+	}
+	
+	public static Image getLineTurnBottomLeft(logic.utility.Color color)
+	{
+		return lineTurnBottomLeft[color.ordinal()];
+	}
+	
+	public static Image getLineTurnBottomRight(logic.utility.Color color)
+	{
+		return lineTurnBottomRight[color.ordinal()];
+	}
+
+	public static Image getLineJunction(logic.utility.Color color)
+	{
+		return lineJunction[color.ordinal()];
+	}
+	
+	public static Image getLineLineVertical(logic.utility.Color color)
+	{
+		return lineLineVertical[color.ordinal()];
+	}
+	
+	public static Image getLineLineHorizontal(logic.utility.Color color)
+	{
+		return lineLineHorizontal[color.ordinal()];
+	}
+	
+	public static Image getLineTJunctionRight(logic.utility.Color color)
+	{
+		return lineTJunctionRight[color.ordinal()];
+	}
+	
+	public static Image getLineTJunctionTop(logic.utility.Color color)
+	{
+		return lineTJunctionTop[color.ordinal()];
+	}
+	
+	public static Image getLineTJunctionLeft(logic.utility.Color color)
+	{
+		return lineTJunctionLeft[color.ordinal()];
+	}
+	
+	public static Image getLineTJunctionBottom(logic.utility.Color color)
+	{
+		return lineTJunctionBottom[color.ordinal()];
+	}
+	
+	public static Image getLineTurn(logic.utility.Color color)
+	{
+		return lineTurnTopRight[color.ordinal()];
+	}
+	
+	public static Image getLineNone(logic.utility.Color color)
+	{
+		return lineNone[color.ordinal()];
 	}
 }

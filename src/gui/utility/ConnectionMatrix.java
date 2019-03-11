@@ -78,7 +78,7 @@ public class ConnectionMatrix
 	public static final boolean[][][][] MATRICES = new boolean[][][][]
 	{
 		//None (1 variation)
-		new boolean[][][] 
+		new boolean[][][]
 		{
 			new boolean[][]
 			{
