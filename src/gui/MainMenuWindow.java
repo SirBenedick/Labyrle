@@ -190,7 +190,7 @@ public class MainMenuWindow extends Stage
 		Pane levelSelectPane = new Pane();
 		this.sceneLevelSelect = new Scene(levelSelectPane);
 		levelSelectPane.setBackground(new Background(new BackgroundImage(
-				new Image("gfx/background_game.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, 
+				new Image("gfx/LevelSelect.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, 
 				new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true))));
 		
 		Label backBtn = new Label();
