@@ -14,15 +14,22 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import logic.GameState;
+import logic.Tilemap;
 
 public class MainMenuWindow extends Stage
 {
+	private final double LVL_OFFSET_X = 60;
+	private final double LVL_OFFSET_Y = 120;
+	private final double BACK_BTN_OFFSET_X = 690;
+	private final double BACK_BTN_OFFSET_Y = 510;
+	private final double BACK_BTN_WIDTH = 100;
+	private final double BACK_BTN_HIGHT = 75;
+	private final double SWITCH_OFFSET_X = 550;
+	private final double SWITCH_OFFSET_Y = 350;
 	private final double SWITCH_WIDTH = 150;
 	private final double SWITCH_HIGHT = 150;
 	private final double WINDOW_HEIGHT = 650;
 	private final double WINDOW_WIDTH = 825;
-	private final double SWITCH_OFFSET_X = 550;
-	private final double SWITCH_OFFSET_Y = 350;
 	private final double START_MIN_X = 140;
 	private final double START_MAX_X = 280;
 	private final double START_MIN_Y = 350;
@@ -31,6 +38,10 @@ public class MainMenuWindow extends Stage
 	private final double MANUAL_MAX_X = 520;
 	private final double MANUAL_MIN_Y = 360;
 	private final double MANUAL_MAX_Y = 430;
+	private final int TILE_SIZE = 4;
+	private final int LVL_MARGIN = 100;
+	private final int LVL_COLUMN_COUNT = 5;
+	private final int LVL_ROW_COUNT = 4;
 	
 	private boolean switchOn = true;
 	private MainMenuWindow window;
@@ -154,9 +165,7 @@ public class MainMenuWindow extends Stage
 
 			@Override
 			public void handle(MouseEvent event)
-			{
-				
-				
+			{	
 				if(event.getButton() == MouseButton.PRIMARY)
 					window.manualIndex++;
 				else if(event.getButton() == MouseButton.SECONDARY)
@@ -181,20 +190,53 @@ public class MainMenuWindow extends Stage
 		Pane levelSelectPane = new Pane();
 		this.sceneLevelSelect = new Scene(levelSelectPane);
 		levelSelectPane.setBackground(new Background(new BackgroundImage(
-				new Image("gfx/background_game.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, 
+				new Image("gfx/LevelSelect.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, 
 				new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true))));
 		
-		levelSelectPane.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>()
+		Label backBtn = new Label();
+		backBtn.setGraphic(new ImageView(new Image("gfx/back_to_main.png")));
+		backBtn.setMaxSize(BACK_BTN_WIDTH, BACK_BTN_HIGHT);
+		backBtn.setMinSize(BACK_BTN_WIDTH, BACK_BTN_HIGHT);
+		backBtn.setTranslateX(BACK_BTN_OFFSET_X);
+		backBtn.setTranslateY(BACK_BTN_OFFSET_Y);
+		levelSelectPane.getChildren().add(backBtn);
+		
+		backBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>()
 		{
-
 			@Override
 			public void handle(MouseEvent event)
 			{
-				window.setScene(window.sceneMenu);
+				if(event.getButton() == MouseButton.PRIMARY)
+					window.setScene(window.sceneMenu);
+				
 				event.consume();
 			}
 		});
+		//ToDo: Unterschiedliche Maps laden. Eventhandler für jede Map die das GameWindow startet einfügen
+		Tilemap map = new Tilemap();
+		
+		try
+		{
+			map.loadFromFile("labyrinths/test.la");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		for(int i = 0; i < LVL_ROW_COUNT; i++)
+		{
+			for(int j = 0; j < LVL_COLUMN_COUNT; j++)
+			{
+				TilemapRenderer lvl = new TilemapRenderer(map.getWidth() * TILE_SIZE, map.getHeight() * TILE_SIZE, map);
+				lvl.setTileSize(TILE_SIZE);
+				lvl.setTranslateX(LVL_OFFSET_X + LVL_MARGIN * j);
+				lvl.setTranslateY(LVL_OFFSET_Y + LVL_MARGIN * i);
+				
+				levelSelectPane.getChildren().add(lvl);
+
+			}
+		}
 	}
 }
-
-
