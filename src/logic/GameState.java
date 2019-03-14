@@ -117,32 +117,33 @@ public class GameState
 		return unlockedLevel;
 	}
 	
+	@Deprecated
 	public static void restoreSystem() throws Exception
 	{
-		File dir = new File(Defaults.SYSTEM_PATH);
+		/*File dir = new File(Defaults.SYSTEM_PATH);
         if (!dir.exists())
         	(new File(Defaults.SYSTEM_PATH)).mkdir();
         
         dir = new File(Defaults.LABYRINTH_DIRECTORY);
         if (!dir.exists())
-        	(new File(Defaults.LABYRINTH_DIRECTORY)).mkdir();
+        	(new File(Defaults.LABYRINTH_DIRECTORY)).mkdir();*/
         
-        BufferedWriter out = new BufferedWriter(new FileWriter(Defaults.SYSTEM_PATH+"/"+"params.txt"));
+        /*BufferedWriter out = new BufferedWriter(new FileWriter(Defaults.SYSTEM_PATH+"/"+"params.txt"));
         out.write("The application supports following startup parameters: \n\n");
         out.write("-setup (restores basics directories and creates a new save game)\n");
         out.write("-editor (starts the map editor)");
-        out.close();
+        out.close();*/
        
         save();
 	}
 	
 	public static void save() throws Exception
 	{
-        saveToFile(Defaults.SYSTEM_PATH+"/"+Defaults.SAVE_GAME_FILE);
+        saveToFile(Defaults.SAVE_GAME_FILE);
 	}
 	
 	public static void load() throws Exception
 	{
-		loadFromFile(Defaults.SYSTEM_PATH+"/"+Defaults.SAVE_GAME_FILE);
+		loadFromFile(Defaults.SAVE_GAME_FILE);
 	}
 }

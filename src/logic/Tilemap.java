@@ -384,7 +384,8 @@ public class Tilemap
 
 	public void loadFromFile(String path) throws Exception
 	{
-		InputStream in = new FileInputStream(path);
+		System.out.println(path);
+		InputStream in = getClass().getClassLoader().getResourceAsStream(path);
 		byte[] validation_header = new byte[2];
 
 		// Read file id

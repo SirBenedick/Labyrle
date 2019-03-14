@@ -36,13 +36,12 @@ public class Core extends Application
 		{
 			try
 			{
-				GameState.restoreSystem();
 				GameState.save();
 				GameState.load();
 			}
 			catch(Exception ex)
 			{
-				dialogMsg("Could not load save game.", "Error", ex.getMessage(), AlertType.ERROR);
+				dialogMsg("Could not load save game.", "Error", e.getMessage(), AlertType.ERROR);
 				Platform.exit();
 				return;
 			}
@@ -66,8 +65,8 @@ public class Core extends Application
 			{
 				try
 				{
-					GameState.restoreSystem();
-					dialogMsg("Setup done", "yeah we did it. The system is running111!11!", null, AlertType.INFORMATION);
+					//GameState.restoreSystem();
+					dialogMsg("Not supported anymore", "null", null, AlertType.INFORMATION);
 				}
 				catch(Exception e)
 				{
