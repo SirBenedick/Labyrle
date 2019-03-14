@@ -280,10 +280,16 @@ public class MapEditorWindow extends Stage
 		
 		mainScene.setOnKeyReleased((KeyEvent e) ->
 		{
-			if (e.getCode() == KeyCode.PLUS)
+			if (e.getCode() == KeyCode.W)
+			{
 				renderer.getSettings().setShadowOpacity(renderer.getSettings().getShadowOpacity()+0.1f);
-			else if (e.getCode() == KeyCode.MINUS)
+				renderer.drawMap();
+			}
+			else if (e.getCode() == KeyCode.S)
+			{
 				renderer.getSettings().setShadowOpacity(renderer.getSettings().getShadowOpacity()-0.1f);
+				renderer.drawMap();
+			}
 		});
 	}
 	
