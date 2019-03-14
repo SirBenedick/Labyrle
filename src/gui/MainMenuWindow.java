@@ -213,7 +213,7 @@ public class MainMenuWindow extends Stage
 				event.consume();
 			}
 		});
-		//ToDo: Unterschiedliche Maps laden. Eventhandler für jede Map die das GameWindow startet einfügen
+		//ToDo: Unterschiedliche Maps laden.
 		Tilemap map = new Tilemap();
 		
 		try

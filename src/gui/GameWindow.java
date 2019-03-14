@@ -13,8 +13,9 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import logic.GameState;
 import logic.Tilemap;
 
 public class GameWindow extends Stage
@@ -34,7 +35,7 @@ public class GameWindow extends Stage
         	Platform.exit();
     }
 	
-	private GridPane rootLayout;
+	private Pane rootLayout;
 	private Scene mainScene;
 	private TilemapRenderer renderer;
 	private logic.utility.Color selectedColor;
@@ -42,7 +43,7 @@ public class GameWindow extends Stage
 	public GameWindow()
 	{
 		selectedColor = logic.utility.Color.COLOR0;
-		rootLayout = new GridPane();
+		rootLayout = new Pane();
 		rootLayout.setBackground(new Background(Manager.getBackgroundImageGame()));
 		
 		Tilemap tmap = new Tilemap();
@@ -55,8 +56,12 @@ public class GameWindow extends Stage
 				Defaults.TILE_SIZE*logic.Defaults.LabyrinthWidth, 
 				Defaults.TILE_SIZE*logic.Defaults.LabyrinthHeight, 
 				tmap
-		);	
-		rootLayout.add(renderer, 0, 0);
+		);
+		
+		renderer.getSettings().setShadowOpacity(GameState.getSettings().getShadowOpacity());
+		renderer.setTranslateX(50);
+		renderer.setTranslateY(125);
+		rootLayout.getChildren().add(renderer);
 		
 		renderer.addEventHandler(MouseEvent.MOUSE_DRAGGED, 
 		(MouseEvent e) ->
@@ -98,9 +103,9 @@ public class GameWindow extends Stage
 		});
 		
 		renderer.drawGrid();
-		this.sizeToScene();
-		//this.setWidth(825.0);
-		//this.setHeight(650.0);
+		this.setResizable(false);
+		this.setWidth(1031.25);
+		this.setHeight(812.5);
 	}
 	
 	private void applyPaint(MouseEvent e)
