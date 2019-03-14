@@ -16,7 +16,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import logic.GameState;
-import logic.Tilemap;
 
 public class GameWindow extends Stage
 {
@@ -41,12 +40,13 @@ public class GameWindow extends Stage
 	private logic.utility.Color selectedColor;
 	
 	private boolean spaceDown;
+	
 	public GameWindow()
 	{
 		spaceDown = false;
 		selectedColor = logic.utility.Color.COLOR0;
 		rootLayout = new Pane();
-		rootLayout.setBackground(new Background(Manager.getBackgroundImageGame()));
+		rootLayout.setBackground(new Background(Manager.getBackgroundImageGame(GameState.getCurrentLevel())));
 		
 		renderer = new TilemapRenderer
 		(

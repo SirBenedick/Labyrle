@@ -157,7 +157,7 @@ public class MainMenuWindow extends Stage
 				else if(event.getButton() == MouseButton.SECONDARY)
 					window.manualIndex--;
 				
-				if(window.manualIndex < 0 || window.manualIndex > gfx.Manager.getManualPageCount())
+				if(window.manualIndex < 0 || window.manualIndex >= gfx.Manager.getManualPageCount())
 				{
 					window.manualIndex = 0;
 					window.manualContentPane.setBackground(gfx.Manager.getManualPage(window.manualIndex));
@@ -198,23 +198,12 @@ public class MainMenuWindow extends Stage
 				event.consume();
 			}
 		});
-		//ToDo: Unterschiedliche Maps laden.
-		Tilemap map = new Tilemap();
-		
-		try
-		{
-			map.loadFromFile("labyrinths/test.la");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			System.exit(1);
-		}
-		
+		int lvlCounter = 0;
 		for(int i = 0; i < LVL_ROW_COUNT; i++)
 		{
 			for(int j = 0; j < LVL_COLUMN_COUNT; j++)
 			{
+				Tilemap map = GameState.getMap(i+j);
 				TilemapRenderer lvl = new TilemapRenderer(map.getWidth() * TILE_SIZE, map.getHeight() * TILE_SIZE, map);
 				lvl.getSettings().setShadowOpacity(0.5f);
 				lvl.setTileSize(TILE_SIZE);
@@ -223,6 +212,9 @@ public class MainMenuWindow extends Stage
 				
 				levelSelectPane.getChildren().add(lvl);
 				
+				final int level = lvlCounter;
+				lvlCounter++;
+				
 				lvl.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>()
 				{
 					@Override
@@ -230,6 +222,7 @@ public class MainMenuWindow extends Stage
 					{
 						if(event.getButton() == MouseButton.PRIMARY)
 						{
+							GameState.setLevel(level);
 							new GameWindow().show();
 							window.close();
 						}

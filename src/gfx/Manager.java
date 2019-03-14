@@ -16,7 +16,8 @@ import javafx.scene.paint.Color;
 
 public class Manager 
 {
-	private static BackgroundImage backgroundImageGame;
+	private static final int MAX_LEVEL_COUNT = 20;
+	private static BackgroundImage[] backgroundImageGame;
 	
 	private static Image wallJunction;
 	private static Image wallLineVertical;
@@ -60,14 +61,19 @@ public class Manager
 	
 	public static void loadImages() throws Exception
 	{
-		backgroundImageGame = new BackgroundImage
-		( 
-			new Image("gfx/background_game.png"), 
-			BackgroundRepeat.NO_REPEAT, 
-			BackgroundRepeat.NO_REPEAT, 
-			BackgroundPosition.CENTER, 
-			new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)
-		);
+		backgroundImageGame = new BackgroundImage[MAX_LEVEL_COUNT];
+		
+		for(int i = 0; i < MAX_LEVEL_COUNT; i++)
+		{
+			backgroundImageGame[i] = new BackgroundImage
+			( 
+				new Image("gfx/background_game_" + (i + 1) + ".png"), 
+				BackgroundRepeat.NO_REPEAT, 
+				BackgroundRepeat.NO_REPEAT, 
+				BackgroundPosition.CENTER, 
+				new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)
+			);
+		}
 		
 		mainMenuBackground = new Image("gfx/Menu_ohne_Knopf.png");
 		backButton = new Image("gfx/back_to_main.png");
@@ -233,9 +239,9 @@ public class Manager
 		return worker.snapshot(params, null);
 	}
 	
-	public static BackgroundImage getBackgroundImageGame()
+	public static BackgroundImage getBackgroundImageGame(int index)
 	{
-		return backgroundImageGame;
+		return backgroundImageGame[index];
 	}
 	
 	public static Image getEndPoint()
