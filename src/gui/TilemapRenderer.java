@@ -31,10 +31,14 @@ public class TilemapRenderer extends Canvas
 	
 	private Settings settings;
 	
+	private boolean renderSelectionHL;
+	
 	public TilemapRenderer(int width, int height, Tilemap map)
 	{
 		super(width, height);
 		this.settings = new Settings();
+		
+		renderSelectionHL = false;
 		
 		absoluteCursorY = 0;
 		absoluteCursorX = 0;
@@ -66,6 +70,16 @@ public class TilemapRenderer extends Canvas
 		});
 		
 		drawMap();
+	}
+	
+	public void setRenderSelectionHL(boolean value)
+	{
+		this.renderSelectionHL = value;
+	}
+	
+	public boolean isRenderSelectionHL()
+	{
+		return this.renderSelectionHL;
 	}
 	
 	public void setSettings(Settings value)
@@ -115,7 +129,7 @@ public class TilemapRenderer extends Canvas
 	{
 		if (isBlocked)
 			return;
-		
+
 		absoluteCursorX = (int)e.getX();
 		absoluteCursorY = (int)e.getY();
 		
@@ -337,7 +351,7 @@ public class TilemapRenderer extends Canvas
 			
 			context.drawImage(gfx.Manager.getFlare(), absoluteCursorX - imgOffsetX, absoluteCursorY - imgOffsetX);
 		}
-		context.restore();
+		
 		
 		//Draw Endpoint
 		TileInformation endPoint = map.getEndPoint();
@@ -355,6 +369,43 @@ public class TilemapRenderer extends Canvas
 		}
 		//Draw colors
 		drawArea(0, 0, map.getWidth(), map.getHeight(), true);
+		context.restore();
+		
+		context.save();
+		//Draw selection if wished
+		if (this.renderSelectionHL)
+		{
+			context.setFill(Color.RED);
+			context.setStroke(Color.RED);
+			context.strokeRect(selectedTileX*tileSize, selectedTileY*tileSize, tileSize, tileSize);
+		}
+		
+		context.restore();
+	}
+	
+	public void setSelectedX(int x)
+	{
+		if (x < 0 || x >= map.getWidth())
+			return;
+		
+		this.selectedTileX = x;
+		absoluteCursorX = x*tileSize + tileSize/2;
+	}
+	
+	public void setSelectedY(int y)
+	{
+		if (y < 0 || y >= map.getHeight())
+			return;
+		
+		this.selectedTileY = y;
+		absoluteCursorY = y*tileSize + tileSize/2;
+	}
+	
+	public void setSelectedTile(int x, int y)
+	{
+		setSelectedX(x);
+		setSelectedY(y);
+		drawMap();
 	}
 	
 	public void drawGrid()

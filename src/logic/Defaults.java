@@ -13,7 +13,10 @@ public class Defaults
 	
 	public static final String LABYRINTH_DIRECTORY 	= "labyrinths";
 	public static final String LABYRINTH_EXTENSION 	= ".la";
+	public static final String LABYRINTH_BASE_NAME	= "level_";
+	public static final int	   LABYRINTH_COUNT 		= 20;
 	
 	public static final String SYSTEM_PATH		    = "system";
 	public static final String SAVE_GAME_FILE	  	= "game.sav";
+	
 }

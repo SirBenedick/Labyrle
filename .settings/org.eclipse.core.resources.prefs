@@ -1,9 +1,8 @@
+=\=\=\=\=\=\=
+<<<<<<<=HEAD
+>>>>>>>=branch 'develop' of https\://github.com/SirBenedick/SEP-PM/
 eclipse.preferences.version=1
 encoding//src/gui/Core.java=UTF-8
 encoding//src/gui/MainMenuWindow.java=UTF-8
-encoding//src/gui/TestCore.java=UTF-8
-<<<<<<< HEAD
 encoding//src/gui/TilemapRenderer.java=UTF-8
-=======
->>>>>>> branch 'develop' of https://github.com/SirBenedick/SEP-PM/
 encoding/<project>=UTF-8

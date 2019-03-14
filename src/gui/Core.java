@@ -48,6 +48,17 @@ public class Core extends Application
 			}
 		}
 		
+		try
+		{
+			GameState.loadAllMaps();
+		}
+		catch(Exception e)
+		{
+			dialogMsg("Error", "Could not load labyrinths", e.getMessage(), AlertType.ERROR);
+			Platform.exit();
+			return;
+		}
+		
 		if (programArguments.size() > 0)
 		{
 			//Check if we should restore our system

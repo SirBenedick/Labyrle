@@ -7,6 +7,7 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.ColorInput;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
@@ -43,9 +44,15 @@ public class Manager
 	private static Image[] lineTurnBottomLeft;
 	private static Image[] lineNone;
 	
-	private static Image flare;
+	private static Background manualBackground[];
 	
+	private static Image flare;
+	private static Image icon;
+	private static Image backButton;
+	private static Image mainMenuBackground;
+	private static Image levelSelectBackground;
 	private static Image endPoint;
+	private static Image switchOn, switchOff;
 
 	//Multi Color Images
 	private static Image[] passPoint;
@@ -62,13 +69,29 @@ public class Manager
 			new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)
 		);
 		
+		mainMenuBackground = new Image("gfx/Menu_ohne_Knopf.png");
+		backButton = new Image("gfx/back_to_main.png");
+		
+		manualBackground = new Background[5];
+		for(int i = 0; i < manualBackground.length; i++)
+		{
+			manualBackground[i] = new Background(new BackgroundImage(
+					new Image("gfx/Manual_" + i + ".png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, 
+					new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true))); 
+		}
+		
 		wallJunction = colorize(new Image("gfx/wall_cross.png"), gui.Defaults.WALL_COLOR);
 		wallLineVertical = colorize(new Image("gfx/wall_line.png"), gui.Defaults.WALL_COLOR);
 		wallTJunctionRight = colorize(new Image("gfx/wall_tjunction.png"), gui.Defaults.WALL_COLOR);
 		wallTurnTopRight = colorize(new Image("gfx/wall_turn.png"), gui.Defaults.WALL_COLOR);
 		wallNone = colorize(new Image("gfx/wall_none.png"), gui.Defaults.WALL_COLOR);
 		
+		levelSelectBackground = new Image("gfx/LevelSelect.png");
+		
 		flare = colorize(new Image("gfx/flare.png"), gui.Defaults.SHADOW_COLOR);
+		icon = new Image("gfx/icon.png");
+		switchOn = new Image("gfx/switchOn.png");
+		switchOff = new Image("gfx/switchOff.png");
 		
 		endPoint = new Image("gfx/endpoint.png");
 		
@@ -133,9 +156,49 @@ public class Manager
 		return worker.snapshot(params, null);
 	}
 	
+	public static Image getBackButton()
+	{
+		return backButton;
+	}
+	
+	public static Background getManualPage(int index)
+	{
+		return manualBackground[index];
+	}
+	
+	public static Image getLevelSelectBackground()
+	{
+		return levelSelectBackground;
+	}
+	
+	public static int getManualPageCount()
+	{
+		return manualBackground.length;
+	}
+	
+	public static Image getSwitchOn()
+	{
+		return switchOn;
+	}
+	
+	public static Image getSwitchOff()
+	{
+		return switchOff;
+	}
+	
 	public static Image getStartPoint(logic.utility.Color color)
 	{
 		return startPoint[color.ordinal()];
+	}
+	
+	public static Image getIcon()
+	{
+		return icon;
+	}
+	
+	public static Image getMainMenuBackground()
+	{
+		return mainMenuBackground;
 	}
 	
 	public static Image getFlare()

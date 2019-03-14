@@ -249,9 +249,6 @@ public class Tilemap
 		//remove pass point
 		tiles[xpos][ypos].setTarget(Color.NONE);
 		
-		//remove color
-		tiles[xpos][ypos].setColor(Color.NONE);
-		
 		//Remove startpoint
 		for (int i = 0; i < startingPoints.length; i++)
 		{
@@ -261,6 +258,9 @@ public class Tilemap
 			if (startingPoints[i].getX() == xpos && startingPoints[i].getY() == ypos)
 				removeStartingPoint(startingPoints[i].getTile().getColor());
 		}
+		
+		//remove color
+		tiles[xpos][ypos].setColor(Color.NONE);
 		
 		//Remove endpoint
 		if (endPoint == null)
@@ -452,5 +452,14 @@ public class Tilemap
 		map.setEndPoint(map.getWidth() - 1, map.getHeight() - 1);
 
 		return map;
+	}
+
+	public void clearColors()
+	{
+		for (int x = 0; x < getWidth(); x++)
+		{
+			for (int y = 0; y < getHeight(); y++)
+				this.setTileColor(x, y, Color.NONE);
+		}
 	}
 }

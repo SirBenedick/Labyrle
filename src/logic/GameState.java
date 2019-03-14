@@ -21,15 +21,50 @@ public class GameState
 	 */
 	private static int unlockedLevel;
 	
+	private static int currentLevel;
+	
 	/*
 	 * Holds current settings. Keep in mind that they might be invalid!
 	 */
 	private static Settings currentSettings;
 	
+	/*
+	 * Stores all maps (preloaded)
+	 */
+	private static Tilemap[] maps;
+	
 	public static void reset()
 	{
 		unlockedLevel = 1;
+		currentLevel = 0;
 		currentSettings = new Settings();
+		maps = new Tilemap[0];
+	}
+	
+	public static void setLevel(int level)
+	{
+		currentLevel = level;
+	}
+	
+	public static void loadAllMaps() throws Exception
+	{
+		maps = new Tilemap[Defaults.LABYRINTH_COUNT];
+		for (int i = 0; i < maps.length; i++)
+		{
+			maps[i] = new Tilemap();
+			maps[i].loadFromFile(Defaults.LABYRINTH_DIRECTORY+"/"+Defaults.LABYRINTH_BASE_NAME+""+i+""+Defaults.LABYRINTH_EXTENSION);
+		}
+	}
+	
+	public static Tilemap getMap(int level)
+	{
+		maps[level].clearColors();
+		return maps[level];
+	}
+	
+	public static int getCurrentLevel()
+	{
+		return currentLevel;
 	}
 	
 	public static Settings getSettings()

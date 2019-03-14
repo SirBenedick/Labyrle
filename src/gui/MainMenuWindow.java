@@ -3,7 +3,6 @@ package gui;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -51,7 +50,7 @@ public class MainMenuWindow extends Stage
 	
 	private Scene sceneManual;
 	private int manualIndex;
-	private Background manualBackground[];
+	
 	private Pane manualContentPane;
 	
 	private Scene sceneLevelSelect;
@@ -63,34 +62,28 @@ public class MainMenuWindow extends Stage
 		this.setWidth(WINDOW_WIDTH);
 		this.setTitle("Labyrle");
 		this.setResizable(false);
-		this.getIcons().add(new Image("gfx/icon.png"));
-		initialiseMenuScene();
-		initilazieManualScene();
-		initilazieLevelSelectScene();
+		this.getIcons().add(gfx.Manager.getIcon());
+		initializeMenuScene();
+		initializeManualScene();
+		initializeLevelSelectScene();
 		this.setScene(sceneMenu);
 	}
 	
-	private void initialiseMenuScene()
+	private void initializeMenuScene()
 	{
 		Pane menuContentPane = new Pane();
 		this.sceneMenu = new Scene(menuContentPane);
 		Background bg = new Background(new BackgroundImage(
-				new Image("gfx/Menu_ohne_Knopf.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, 
+				gfx.Manager.getMainMenuBackground(), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, 
 				new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)));
 		
 		menuContentPane.setBackground(bg);
 		Label switchButton = new Label();
 		
-		if(switchOn)
-		{
-			switchButton.setGraphic(new ImageView(new Image("gfx/switchOn.png")));
-			GameState.getSettings().setShadowOpacity(1.0f);
-		}
-		else
-		{
-			switchButton.setGraphic(new ImageView(new Image("gfx/switchOff.png")));
-			GameState.getSettings().setShadowOpacity(0.0f);
-		}
+		
+		switchButton.setGraphic(new ImageView(gfx.Manager.getSwitchOn()));
+		GameState.getSettings().setShadowOpacity(logic.Defaults.SHADOW_OPACITY);
+		
 		
 		switchButton.setMinSize(SWITCH_WIDTH, SWITCH_HIGHT);
 		switchButton.setMaxSize(SWITCH_WIDTH, SWITCH_HIGHT);
@@ -109,13 +102,13 @@ public class MainMenuWindow extends Stage
             	
             	if(switchOn)
             	{
-            		switchButton.setGraphic(new ImageView(new Image("gfx/switchOff.png")));
+            		switchButton.setGraphic(new ImageView(gfx.Manager.getSwitchOff()));
             		GameState.getSettings().setShadowOpacity(0.0f);
             		switchOn = false;
             	}
             	else
             	{
-            		switchButton.setGraphic(new ImageView(new Image("gfx/switchOn.png")));
+            		switchButton.setGraphic(new ImageView(gfx.Manager.getSwitchOn()));
             		GameState.getSettings().setShadowOpacity(Defaults.SHADOW_OPACITY);
             		switchOn = true;
             	}
@@ -146,20 +139,12 @@ public class MainMenuWindow extends Stage
         });
 	}
 	
-	private void initilazieManualScene()
+	private void initializeManualScene()
 	{
 		this.manualIndex = 0;
 		manualContentPane = new Pane();
 		this.sceneManual = new Scene(manualContentPane);
-		this.manualBackground = new Background[5];
-		for(int i = 0; i < manualBackground.length; i++)
-		{
-			manualBackground[i] = new Background(new BackgroundImage(
-					new Image("gfx/Manual_" + i + ".png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, 
-					new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true))); 
-		}
-		
-		manualContentPane.setBackground(manualBackground[this.manualIndex]);
+		manualContentPane.setBackground(gfx.Manager.getManualPage(0));
 		
 		manualContentPane.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>()
 		{
@@ -172,30 +157,30 @@ public class MainMenuWindow extends Stage
 				else if(event.getButton() == MouseButton.SECONDARY)
 					window.manualIndex--;
 				
-				if(window.manualIndex < 0 || window.manualIndex > manualBackground.length - 1)
+				if(window.manualIndex < 0 || window.manualIndex > gfx.Manager.getManualPageCount())
 				{
 					window.manualIndex = 0;
-					window.manualContentPane.setBackground(window.manualBackground[window.manualIndex]);
+					window.manualContentPane.setBackground(gfx.Manager.getManualPage(window.manualIndex));
 					window.setScene(window.sceneMenu);
 				}
 				else 
-					window.manualContentPane.setBackground(window.manualBackground[window.manualIndex]);
+					window.manualContentPane.setBackground(gfx.Manager.getManualPage(window.manualIndex));
 				
 				event.consume();
 			}
 		});
 	}
 	
-	private void initilazieLevelSelectScene()
+	private void initializeLevelSelectScene()
 	{
 		Pane levelSelectPane = new Pane();
 		this.sceneLevelSelect = new Scene(levelSelectPane);
 		levelSelectPane.setBackground(new Background(new BackgroundImage(
-				new Image("gfx/LevelSelect.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, 
+				gfx.Manager.getLevelSelectBackground(), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, 
 				new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true))));
 		
 		Label backBtn = new Label();
-		backBtn.setGraphic(new ImageView(new Image("gfx/back_to_main.png")));
+		backBtn.setGraphic(new ImageView(gfx.Manager.getBackButton()));
 		backBtn.setMaxSize(BACK_BTN_WIDTH, BACK_BTN_HIGHT);
 		backBtn.setMinSize(BACK_BTN_WIDTH, BACK_BTN_HIGHT);
 		backBtn.setTranslateX(BACK_BTN_OFFSET_X);
