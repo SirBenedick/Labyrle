@@ -1,8 +1,5 @@
 package gui;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-
 import gfx.Manager;
 import gui.utility.ConnectionMatrix;
 import gui.utility.ConnectionType;
@@ -125,13 +122,12 @@ public class TilemapRenderer extends Canvas
 		selectedTileX = (int)e.getX() / tileSize;
 		selectedTileY = (int)e.getY() / tileSize;
 		
-		//Since we renderer a mask depending on absolute cursor position.
-		//There is no change
-		/*if (oldX == selectedTileX && oldY == selectedTileY)
-		{
-			if (!forceRedrawOnValidCoordinates)
-				return;
-		}*/
+		//Since we renderer a mask depending on absolute cursor position this code becomes deprecated.
+//		if (oldX == selectedTileX && oldY == selectedTileY)
+//		{
+//			if (!forceRedrawOnValidCoordinates)
+//				return;
+//		}
 		//We are out of boundaries
 		if (
 				(selectedTileX < 0 || selectedTileX >= map.getWidth())

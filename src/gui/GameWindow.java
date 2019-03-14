@@ -25,7 +25,7 @@ public class GameWindow extends Stage
         alert.setTitle("Sieg!");
  
         alert.setHeaderText("Du hast gewonnen");
-        alert.setContentText("Möchtest du noch einmal spielen, yo?");
+        alert.setContentText("Mï¿½chtest du noch einmal spielen, yo?");
  
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get() == ButtonType.OK)
@@ -61,6 +61,14 @@ public class GameWindow extends Stage
 		renderer.addEventHandler(MouseEvent.MOUSE_DRAGGED, 
 		(MouseEvent e) ->
 		{
+			if (e.getButton() == MouseButton.PRIMARY)
+			{
+				if (renderer.getMap().isStartPoint(renderer.getSelectedX(), renderer.getSelectedY()))
+				{
+					selectedColor = renderer.getSelectedTile().getColor();
+					return;
+				}
+			}
 			applyPaint(e);
 		});
 		

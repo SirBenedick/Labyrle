@@ -62,6 +62,7 @@ public class Tilemap
 	 */
 	private ArrayList<TileInformation> passPoints;
 	
+	
 	public Tilemap()
 	{
 		clear();
