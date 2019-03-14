@@ -6,17 +6,10 @@ import java.awt.image.BufferedImage;
 import gfx.Manager;
 import gui.utility.ConnectionMatrix;
 import gui.utility.ConnectionType;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import logic.Settings;
 import logic.Tilemap;
 import logic.utility.Tile;
@@ -96,6 +89,7 @@ public class TilemapRenderer extends Canvas
 	public void setTileSize(int value)
 	{
 		tileSize = value;
+		drawMap();
 	}
 	
 	public boolean isBlocked()
@@ -328,21 +322,25 @@ public class TilemapRenderer extends Canvas
 		//context.clearRect(0, 0, getWidth(), getHeight());
 		int imgOffsetY = (int) (Manager.getFlare().getHeight()/2);
 		int imgOffsetX = (int) (Manager.getFlare().getWidth()/2);
-		context.setGlobalAlpha(0.995);
-		context.setFill(Defaults.SHADOW_COLOR);
-		//top shade
-		context.fillRect(0, 0, getWidth(), absoluteCursorY - imgOffsetY);
 		
-		//bottom shade
-		context.fillRect(0, absoluteCursorY + imgOffsetY, getWidth(), getHeight() - absoluteCursorY + imgOffsetY);
-		
-		//left shade
-		context.fillRect(0, absoluteCursorY - imgOffsetY, absoluteCursorX - imgOffsetX, Manager.getFlare().getHeight());
-		
-		//right shade
-		context.fillRect(absoluteCursorX + imgOffsetX, absoluteCursorY - imgOffsetY, getWidth() - absoluteCursorX - imgOffsetY, Manager.getFlare().getHeight());
-		
-		context.drawImage(gfx.Manager.getFlare(), absoluteCursorX - imgOffsetX, absoluteCursorY - imgOffsetX);
+		if (settings.getShadowOpacity() >= 0.01f)
+		{
+			context.setGlobalAlpha(settings.getShadowOpacity());
+			context.setFill(Defaults.SHADOW_COLOR);
+			//top shade
+			context.fillRect(0, 0, getWidth(), absoluteCursorY - imgOffsetY);
+			
+			//bottom shade
+			context.fillRect(0, absoluteCursorY + imgOffsetY, getWidth(), getHeight() - absoluteCursorY + imgOffsetY);
+			
+			//left shade
+			context.fillRect(0, absoluteCursorY - imgOffsetY, absoluteCursorX - imgOffsetX, Manager.getFlare().getHeight());
+			
+			//right shade
+			context.fillRect(absoluteCursorX + imgOffsetX, absoluteCursorY - imgOffsetY, getWidth() - absoluteCursorX - imgOffsetY, Manager.getFlare().getHeight());
+			
+			context.drawImage(gfx.Manager.getFlare(), absoluteCursorX - imgOffsetX, absoluteCursorY - imgOffsetX);
+		}
 		context.restore();
 		
 		//Draw Endpoint

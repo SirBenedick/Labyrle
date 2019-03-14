@@ -13,6 +13,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Alert.AlertType;
@@ -91,6 +93,7 @@ public class MapEditorWindow extends Stage
 		
 		//Displays the map, is hooked with events in the end of this constructor
 		renderer = new TilemapRenderer(Defaults.TILE_SIZE*logic.Defaults.LabyrinthWidth, Defaults.TILE_SIZE*logic.Defaults.LabyrinthHeight, new Tilemap());	
+		renderer.getSettings().setShadowOpacity(0.0f);
 		rootLayout.add(renderer, 0, 0);
 		
 		// PAINT MODE
@@ -273,6 +276,14 @@ public class MapEditorWindow extends Stage
 		{
 			if (!yesnoDialog("Close", "Do you really want to exit the map editor? All unsaved progress will be lost.", null))
 				e.consume();
+		});
+		
+		mainScene.setOnKeyReleased((KeyEvent e) ->
+		{
+			if (e.getCode() == KeyCode.PLUS)
+				renderer.getSettings().setShadowOpacity(renderer.getSettings().getShadowOpacity()+0.1f);
+			else if (e.getCode() == KeyCode.MINUS)
+				renderer.getSettings().setShadowOpacity(renderer.getSettings().getShadowOpacity()-0.1f);
 		});
 	}
 	

@@ -64,4 +64,19 @@ public class Settings
 		illuminationScale = Defaults.ILLUMINATION_SCALE;
 		shadowOpacity = Defaults.SHADOW_OPACITY;
 	}
+
+	public float getShadowOpacity()
+	{
+		return shadowOpacity;
+	}
+	
+	public float getIlluminationScale()
+	{
+		return illuminationScale;
+	}
+	
+	public int getDelayBeforeHidingMap()
+	{
+		return delayBeforeHidingMap;
+	}
 }
