@@ -68,11 +68,11 @@ public class ConnectionMatrix
 				{
 					if (map.getTiles()[tilemap_x][tilemap_y].getColor() != color)
 					{
-						if (map.getEndPoint() != null)
-						{
-							if (map.getEndPoint().getX() != tilemap_x || map.getEndPoint().getY() != tilemap_y)
-								return false;
-						}
+						if (map.getEndPoint() == null)
+							return false;
+						
+						if (map.getEndPoint().getX() != tilemap_x || map.getEndPoint().getY() != tilemap_y)
+							return false;
 					}
 				}
 			}
