@@ -120,6 +120,7 @@ public class GameWindow extends Stage
 		});
 		
 		renderer.drawGrid();
+		this.getIcons().add(gfx.Manager.getIcon());
 		this.setResizable(false);
 		this.setWidth(1031.25);
 		this.setHeight(812.5);
