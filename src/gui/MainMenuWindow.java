@@ -231,6 +231,7 @@ public class MainMenuWindow extends Stage
 			for(int j = 0; j < LVL_COLUMN_COUNT; j++)
 			{
 				TilemapRenderer lvl = new TilemapRenderer(map.getWidth() * TILE_SIZE, map.getHeight() * TILE_SIZE, map);
+				lvl.getSettings().setShadowOpacity(0.5f);
 				lvl.setTileSize(TILE_SIZE);
 				lvl.setTranslateX(LVL_OFFSET_X + LVL_MARGIN * j);
 				lvl.setTranslateY(LVL_OFFSET_Y + LVL_MARGIN * i);
