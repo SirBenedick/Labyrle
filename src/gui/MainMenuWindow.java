@@ -13,6 +13,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import logic.Defaults;
 import logic.GameState;
 import logic.Tilemap;
 
@@ -115,7 +116,7 @@ public class MainMenuWindow extends Stage
             	else
             	{
             		switchButton.setGraphic(new ImageView(new Image("gfx/switchOn.png")));
-            		GameState.getSettings().setShadowOpacity(1.0f);
+            		GameState.getSettings().setShadowOpacity(Defaults.SHADOW_OPACITY);
             		switchOn = true;
             	}
             	event.consume();
@@ -230,12 +231,26 @@ public class MainMenuWindow extends Stage
 			for(int j = 0; j < LVL_COLUMN_COUNT; j++)
 			{
 				TilemapRenderer lvl = new TilemapRenderer(map.getWidth() * TILE_SIZE, map.getHeight() * TILE_SIZE, map);
+				lvl.getSettings().setShadowOpacity(0.5f);
 				lvl.setTileSize(TILE_SIZE);
 				lvl.setTranslateX(LVL_OFFSET_X + LVL_MARGIN * j);
 				lvl.setTranslateY(LVL_OFFSET_Y + LVL_MARGIN * i);
 				
 				levelSelectPane.getChildren().add(lvl);
-
+				
+				lvl.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>()
+				{
+					@Override
+					public void handle(MouseEvent event)
+					{
+						if(event.getButton() == MouseButton.PRIMARY)
+						{
+							new GameWindow().show();
+							window.close();
+						}
+						event.consume();
+					}
+				});
 			}
 		}
 	}
