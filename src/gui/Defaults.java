@@ -13,4 +13,5 @@ public class Defaults
 		Color.YELLOW
 	};
 	public static final Color WALL_COLOR = Color.BLACK;
+	public static final Color SHADOW_COLOR = Color.BLACK;
 }

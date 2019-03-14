@@ -3,10 +3,8 @@ package gui;
 import java.io.File;
 import java.util.Optional;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -21,12 +19,10 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import logic.Tilemap;
-import logic.utility.Color;
 import logic.utility.TileType;
 
 public class MapEditorWindow extends Stage
@@ -85,7 +81,7 @@ public class MapEditorWindow extends Stage
 		final int offsetFile = 8;
 		
 		rootLayout = new GridPane();
-		rootLayout.setBackground(new Background(gfx.Manager.getBackgroundImageGame()));
+		//rootLayout.setBackground(new Background(gfx.Manager.getBackgroundImageGame()));
 		
 		//Side bar for editor controls
 		rightLayout = new GridPane();

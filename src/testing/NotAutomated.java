@@ -7,7 +7,7 @@ public class NotAutomated
 		logic.GameState state = new logic.GameState();
 		try
 		{
-			state.restoreSystem();
+			//GameState.restoreSystem();
 		} catch (Exception e)
 		{
 			System.out.println("ohh noes");

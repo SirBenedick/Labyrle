@@ -1,12 +1,23 @@
 package gui;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
+import gfx.Manager;
 import gui.utility.ConnectionMatrix;
 import gui.utility.ConnectionType;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
+import javafx.scene.shape.Rectangle;
+import logic.Settings;
 import logic.Tilemap;
 import logic.utility.Tile;
 import logic.utility.TileInformation;
@@ -24,11 +35,19 @@ public class TilemapRenderer extends Canvas
 	private int selectedTileX, oldX;
 	private int selectedTileY, oldY;
 	
+	private int absoluteCursorX, absoluteCursorY;
+	
 	private boolean isBlocked;
+	
+	private Settings settings;
 	
 	public TilemapRenderer(int width, int height, Tilemap map)
 	{
 		super(width, height);
+		this.settings = new Settings();
+		
+		absoluteCursorY = 0;
+		absoluteCursorX = 0;
 		
 		isBlocked = false;
 		tileSize = Defaults.TILE_SIZE;
@@ -57,6 +76,16 @@ public class TilemapRenderer extends Canvas
 		});
 		
 		drawMap();
+	}
+	
+	public void setSettings(Settings value)
+	{
+		this.settings = value;
+	}
+	
+	public Settings getSettings()
+	{
+		return this.settings;
 	}
 	
 	public int getTileSize()
@@ -96,15 +125,19 @@ public class TilemapRenderer extends Canvas
 		if (isBlocked)
 			return;
 		
+		absoluteCursorX = (int)e.getX();
+		absoluteCursorY = (int)e.getY();
+		
 		selectedTileX = (int)e.getX() / tileSize;
 		selectedTileY = (int)e.getY() / tileSize;
 		
+		//Since we renderer a mask depending on absolute cursor position.
 		//There is no change
-		if (oldX == selectedTileX && oldY == selectedTileY)
+		/*if (oldX == selectedTileX && oldY == selectedTileY)
 		{
 			if (!forceRedrawOnValidCoordinates)
 				return;
-		}
+		}*/
 		//We are out of boundaries
 		if (
 				(selectedTileX < 0 || selectedTileX >= map.getWidth())
@@ -165,7 +198,7 @@ public class TilemapRenderer extends Canvas
 		}
 	}
 	
-	private void drawArea(int startX, int startY, int width, int height)
+	private void drawArea(int startX, int startY, int width, int height, boolean drawColors)
 	{
 		int endX = startX+width;
 		int endY = startY+height;
@@ -183,7 +216,7 @@ public class TilemapRenderer extends Canvas
 				Tile t = map.getTiles()[x][y];
 				int absx = x*tileSize;
 				int absy = y*tileSize;
-				if (t.getType() == TileType.WALL)
+				if (t.getType() == TileType.WALL && !drawColors)
 				{
 					switch(typeMatrix[x][y])
 					{
@@ -228,7 +261,7 @@ public class TilemapRenderer extends Canvas
 					}
 				}
 				//Is of color and not an entity?
-				else if (!map.isEntity(x, y) && t.getColor() != logic.utility.Color.NONE)
+				else if (!map.isEntity(x, y) && t.getColor() != logic.utility.Color.NONE && drawColors)
 				{
 					logic.utility.Color color = t.getColor();
 					switch(typeMatrix[x][y])
@@ -288,7 +321,29 @@ public class TilemapRenderer extends Canvas
 		if (showGrid)
 			drawGrid();
 		
-		drawArea(0, 0, map.getWidth(), map.getHeight());
+		drawArea(0, 0, map.getWidth(), map.getHeight(), false);
+		
+		//Draw Dark shadow
+
+		//context.clearRect(0, 0, getWidth(), getHeight());
+		int imgOffsetY = (int) (Manager.getFlare().getHeight()/2);
+		int imgOffsetX = (int) (Manager.getFlare().getWidth()/2);
+		context.setGlobalAlpha(0.995);
+		context.setFill(Defaults.SHADOW_COLOR);
+		//top shade
+		context.fillRect(0, 0, getWidth(), absoluteCursorY - imgOffsetY);
+		
+		//bottom shade
+		context.fillRect(0, absoluteCursorY + imgOffsetY, getWidth(), getHeight() - absoluteCursorY + imgOffsetY);
+		
+		//left shade
+		context.fillRect(0, absoluteCursorY - imgOffsetY, absoluteCursorX - imgOffsetX, Manager.getFlare().getHeight());
+		
+		//right shade
+		context.fillRect(absoluteCursorX + imgOffsetX, absoluteCursorY - imgOffsetY, getWidth() - absoluteCursorX - imgOffsetY, Manager.getFlare().getHeight());
+		
+		context.drawImage(gfx.Manager.getFlare(), absoluteCursorX - imgOffsetX, absoluteCursorY - imgOffsetX);
+		context.restore();
 		
 		//Draw Endpoint
 		TileInformation endPoint = map.getEndPoint();
@@ -304,8 +359,8 @@ public class TilemapRenderer extends Canvas
 			
 			context.drawImage(gfx.Manager.getStartPoint(startPoints[i].getTile().getColor()), startPoints[i].getX()*tileSize, startPoints[i].getY()*tileSize, tileSize, tileSize);
 		}
-		
-		context.restore();
+		//Draw colors
+		drawArea(0, 0, map.getWidth(), map.getHeight(), true);
 	}
 	
 	public void drawGrid()

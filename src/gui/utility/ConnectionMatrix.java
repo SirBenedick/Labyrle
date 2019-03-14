@@ -65,9 +65,12 @@ public class ConnectionMatrix
 						return false;
 				}
 				else
-				{		
+				{
 					if (map.getTiles()[tilemap_x][tilemap_y].getColor() != color)
-						return false;
+					{
+						if (map.getEndPoint().getX() != tilemap_x || map.getEndPoint().getY() != tilemap_y)
+							return false;
+					}
 				}
 			}
 		}

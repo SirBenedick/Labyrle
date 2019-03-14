@@ -24,7 +24,7 @@ public class Settings
 	 */
 	private float shadowOpacity;
 	
-	Settings()
+	public Settings()
 	{
 		applyDefault();
 	}

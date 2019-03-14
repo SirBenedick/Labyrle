@@ -30,17 +30,29 @@ public class TileInformation
 	{
 		if (obj == null)
 			 return false;
+		
 		if (obj == this)
 			return true;
-		if (!(obj instanceof Tile))
+		
+		if (!(obj instanceof TileInformation))
 			return false;
+		
 		TileInformation tileInfo = (TileInformation) obj;
-		if(!(this.tile.equals(tileInfo.tile)))
+		
+		if(!this.tile.equals(tileInfo.tile))
 			return false;
-		if(!(this.x == tileInfo.x))
+		
+		if(this.x != tileInfo.x)
 			return false;
-		if(!(this.y == tileInfo.y))
+		
+		if(this.y != tileInfo.y)
 			return false;
+		
 		return true;
+	}
+	
+	public String toString()
+	{
+		return this.getX() + " " + this.getY() + " " + this.getTile().getColor() + " " + this.getTile().getType() + " " + this.getTile().getTarget();
 	}
 }

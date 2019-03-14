@@ -4,8 +4,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import logic.utility.Color;
+import logic.utility.Dijkstra;
+import logic.utility.Dijkstra;
 import logic.utility.Tile;
 import logic.utility.TileInformation;
 import logic.utility.TileType;
@@ -52,9 +57,15 @@ public class Tilemap
 	 */
 	private TileInformation endPoint;
 
+	/*
+	 * Used for fast lookup, since the pass points are embedded directly in the tile properties.
+	 */
+	private ArrayList<TileInformation> passPoints;
+	
 	public Tilemap()
 	{
 		clear();
+		passPoints = new ArrayList<TileInformation>();
 	}
 	
 	public void setTileColor(int x, int y, Color c)
@@ -70,6 +81,20 @@ public class Tilemap
 			return;
 		
 		tiles[x][y].setColor(c);
+	}
+	
+	private void createPassPointList()
+	{
+		passPoints = new ArrayList<TileInformation>();
+		
+		for (int x = 0; x < getWidth(); x++)
+		{
+			for (int y = 0; y < getHeight(); y++)
+			{
+				if (tiles[x][y].getTarget() != Color.NONE)
+					passPoints.add(new TileInformation(tiles[x][y], x, y));
+			}
+		}
 	}
 	
 	public void removeTileColor(int x, int y)
@@ -278,6 +303,37 @@ public class Tilemap
 		tiles[x][y].setColor(c);
 		tiles[x][y].setTarget(c);
 	}
+	
+	public boolean isSolved()
+	{
+		//Check if colors are connected with the finish.
+		for (int i = 0; i < startingPoints.length; i++)
+		{
+			if (startingPoints[i] == null)
+				continue;
+			
+			if (!Dijkstra.isValidPath(this, startingPoints[i], endPoint))
+				return false;
+		}
+		
+		//Check if all required passpoints are connected as well.
+		for (Iterator<TileInformation> iter = passPoints.iterator(); iter.hasNext(); )
+		{
+			TileInformation passPoint = iter.next();
+			if (
+					!Dijkstra.isValidPath
+					(
+							this, 
+							this.getStartPoints()[passPoint.getTile().getColor().ordinal()], 
+							passPoint
+					)
+				)
+				return false;
+		}
+		
+		
+		return true;
+	}
 
 	public void saveToFile(String path) throws Exception
 	{
@@ -383,6 +439,8 @@ public class Tilemap
 		
 		if (!isValid())
 			throw new Exception("Tilemap is not valid!");
+		
+		createPassPointList();
 	}
 
 	public static Tilemap makeTestMap()

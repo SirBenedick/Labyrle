@@ -2,81 +2,74 @@ package logic.utility;
 
 import java.util.LinkedList;
 
-import logic.Defaults;
 import logic.Tilemap;
-import logic.utility.Tile;
 import logic.utility.TileInformation;
 
 public class Dijkstra
 {
-	public boolean isValidPath(Tilemap map, TileInformation start, TileInformation end)
+	static public boolean isValidPath(Tilemap map, TileInformation start, TileInformation end)
 	{	
 		LinkedList<TileInformation> visited = new LinkedList<TileInformation>();
 		LinkedList<TileInformation> border = new LinkedList<TileInformation>();
 		
-		visited.addLast(start);
+		visited.add(start);
+		addToBorder(start, visited, border, map);
 		
+		//Points match
+		if (start.equals(end))
+			return true;
+		
+		//There is no border initially
+		if (border.size() == 0)
+			return false;
+		
+		boolean found = false;
+		
+		//As long as there are nearby possible fields or we found our target.
 		do
 		{
-			border = getBorder(visited.getLast(), map, visited, border);
-			if(border.size()==0)
-				return false;
-			visited.addLast(border.getFirst());
-			border.removeFirst();			
-		}	while(!isInList(visited, end));
-		return true;
-	}
-
-	private LinkedList<TileInformation> getBorder(TileInformation startNode, Tilemap map, LinkedList<TileInformation> visited, LinkedList<TileInformation> border)
-	{
-		Tile[][] tiles = map.getTiles();
+			TileInformation next = border.pop();
+			visited.add(next);
+			addToBorder(next, visited, border, map);
+		} while( !(found = visited.contains(end)) && !border.isEmpty() );
 		
-		//Oben
-		int x = startNode.getX();
-		int y = startNode.getY() - 1;
-		if(isNode(map, x, y, tiles[x][y].getColor()))
-			if(!isInList(visited, new TileInformation(tiles[x][y], x, y)))
-				if(!isInList(border, new TileInformation(tiles[x][y], x, y)))
-					border.addLast(new TileInformation(tiles[x][y], x, y));
-		//Rechts
-		x = startNode.getX() + 1;
-		y = startNode.getY();
-		if(isNode(map, x, y, tiles[x][y].getColor()))
-			if(!isInList(visited, new TileInformation(tiles[x][y], x, y)))
-				if(!isInList(border, new TileInformation(tiles[x][y], x, y)))
-					border.addLast(new TileInformation(tiles[x][y], x, y));
-		//Links
-		x = startNode.getX() - 1;
-		y = startNode.getY();
-		if(isNode(map, x, y, tiles[x][y].getColor()))
-			if(!isInList(visited, new TileInformation(tiles[x][y], x, y)))
-				if(!isInList(border, new TileInformation(tiles[x][y], x, y)))
-					border.addLast(new TileInformation(tiles[x][y], x, y));
-		//Unten
-		x = startNode.getX();
-		y = startNode.getY() + 1;
-		if(isNode(map, x, y, tiles[x][y].getColor()))
-			if(!isInList(visited, new TileInformation(tiles[x][y], x, y)))
-				if(!isInList(border, new TileInformation(tiles[x][y], x, y)))
-					border.addLast(new TileInformation(tiles[x][y], x, y));
-		return border;
+		return found;
 	}
 	
-	private boolean isNode(Tilemap map, int x, int y, Color color)
+	static private void addToBorder(TileInformation info, LinkedList<TileInformation> visited, LinkedList<TileInformation> border, Tilemap map)
 	{
-		if(x < 0 || x >= Defaults.LabyrinthWidth || y < 0 || y >= Defaults.LabyrinthHeight)
-			return false;
+		int x = info.getX(), y = info.getY();
+		Color color = info.getTile().getColor();
 		
-		Tile[][] arrayMap = map.getTiles();
-		
-		if(color != arrayMap[x][y].getColor())
-			return false;
-		
-		return true;
+		//Left
+		addToList(x-1, y, color, visited, border, map);
+		//Right
+		addToList(x+1, y, color, visited, border, map);
+		//Top
+		addToList(x, y-1, color, visited, border, map);
+		//Bottom
+		addToList(x, y+1, color, visited, border, map);
 	}
 	
-	private boolean isInList(LinkedList<TileInformation> list, TileInformation tileInfo)
+	static private void addToList(int x, int y, Color color, LinkedList<TileInformation> visited, LinkedList<TileInformation> border, Tilemap map)
 	{
-		return list.contains(tileInfo);
+		//Boundary check
+		if (x < 0 || x >= map.getWidth())
+			return;
+		
+		if (y < 0 || y >= map.getHeight())
+			return;
+		
+		//Is it of same color and not an end point?
+		if (map.getTiles()[x][y].getColor() != color && !(map.getEndPoint().getX() == x && map.getEndPoint().getY() == y))
+			return;
+		
+		//Is already in visited or border?
+		TileInformation info = new TileInformation(map.getTiles()[x][y], x, y);
+		if (border.contains(info) || visited.contains(info))
+			return;
+	
+		//We can add since it has not been visited or is not already in our border
+		border.add(info);
 	}
 }

@@ -55,17 +55,24 @@ public class Tile
 	{
 		if (obj == null)
 			 return false;
+		
 		if (obj == this)
 			return true;
+		
 		if (!(obj instanceof Tile))
 			return false;
+		
 		Tile tile = (Tile)obj;
-		if(!(this.color == tile.color))
+		
+		if(this.color != tile.color)
 			return false;
-		if(!(this.target == tile.target))
+		
+		if(this.target != tile.target)
 			return false;
-		if(!(this.type == tile.type))
+		
+		if(this.type != tile.type)
 			return false;
+		
 		return true;
 	}
 }

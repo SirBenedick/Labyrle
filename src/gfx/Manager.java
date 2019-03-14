@@ -43,6 +43,7 @@ public class Manager
 	private static Image[] lineTurnBottomLeft;
 	private static Image[] lineNone;
 	
+	private static Image flare;
 	
 	private static Image endPoint;
 
@@ -52,13 +53,22 @@ public class Manager
 	
 	public static void loadImages() throws Exception
 	{
-		backgroundImageGame = new BackgroundImage( new Image("gfx/background_game.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+		backgroundImageGame = new BackgroundImage
+		( 
+			new Image("gfx/background_game.png"), 
+			BackgroundRepeat.NO_REPEAT, 
+			BackgroundRepeat.NO_REPEAT, 
+			BackgroundPosition.CENTER, 
+			new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)
+		);
 		
 		wallJunction = colorize(new Image("gfx/wall_cross.png"), gui.Defaults.WALL_COLOR);
 		wallLineVertical = colorize(new Image("gfx/wall_line.png"), gui.Defaults.WALL_COLOR);
 		wallTJunctionRight = colorize(new Image("gfx/wall_tjunction.png"), gui.Defaults.WALL_COLOR);
 		wallTurnTopRight = colorize(new Image("gfx/wall_turn.png"), gui.Defaults.WALL_COLOR);
 		wallNone = colorize(new Image("gfx/wall_none.png"), gui.Defaults.WALL_COLOR);
+		
+		flare = colorize(new Image("gfx/flare.png"), gui.Defaults.SHADOW_COLOR);
 		
 		endPoint = new Image("gfx/endpoint.png");
 		
@@ -126,6 +136,11 @@ public class Manager
 	public static Image getStartPoint(logic.utility.Color color)
 	{
 		return startPoint[color.ordinal()];
+	}
+	
+	public static Image getFlare()
+	{
+		return flare;
 	}
 	
 	public static Image getPassPoint(logic.utility.Color color)
