@@ -3,7 +3,6 @@ package gui;
 import java.util.Optional;
 
 import gfx.Manager;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -22,19 +21,29 @@ import logic.GameState;
 
 public class GameWindow extends Stage
 {
-	private void ExitVictoryDebug() 
+	private void showVictoryDialog() 
 	{
         Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Sieg!");
+        alert.setTitle("Herzlichen Glückwunsch!");
  
-        alert.setHeaderText("Du hast gewonnen");
-        alert.setContentText("Möchtest du noch einmal spielen, yo?");
+        alert.setHeaderText("Du hast das Labyrinth gelöst");
+        alert.setContentText("Möchtest du noch es einmal lösen?");
  
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get() == ButtonType.OK)
-        	System.out.println("oh noes");
+        {
+        	window.renderer.getMap().clearColors();
+			window.renderer.drawMap();
+			//ToDo: LvlCounter ggf erhöhen
+        }
         else
-        	Platform.exit();
+        {
+        	//ToDo: lvlCounter ggf erhöhen
+        	MainMenuWindow wd = new MainMenuWindow();
+        	wd.setLevelSelectScene();
+        	wd.show();
+			window.close();
+        }
     }
 	
 	private GameWindow window;
@@ -182,8 +191,18 @@ public class GameWindow extends Stage
 			{
 				if(event.getButton() == MouseButton.PRIMARY)
 				{
-					new MainMenuWindow().show();
-					window.close();
+					Alert exitAlert = new Alert(AlertType.CONFIRMATION);
+			        exitAlert.setTitle("Level beenden?");
+			 
+			        exitAlert.setHeaderText("Du bist in einem laufenden Spiel");
+			        exitAlert.setContentText("Sicher, dass du das Level beenden möchtest?\nJeglicher Fortschritt geht verloren.\n");
+			 
+			        Optional<ButtonType> result = exitAlert.showAndWait();
+			        if(result.get() == ButtonType.OK)
+			        {
+						new MainMenuWindow().show();
+						window.close();
+			        }
 				}
 				
 				event.consume();
@@ -234,7 +253,7 @@ public class GameWindow extends Stage
 			renderer.getMap().setTileColor(renderer.getSelectedX(), renderer.getSelectedY(), selectedColor);
 			if (renderer.getMap().isSolved())
 			{
-				ExitVictoryDebug();
+				showVictoryDialog();
 			}
 		}
 		else

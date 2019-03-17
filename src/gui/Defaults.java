@@ -13,5 +13,5 @@ public class Defaults
 		Color.web("#647022")
 	};
 	public static final Color WALL_COLOR = Color.BLACK;
-	public static final Color SHADOW_COLOR = Color.WHITE;
+	public static final Color SHADOW_COLOR = Color.rgb(219, 219, 219);
 }

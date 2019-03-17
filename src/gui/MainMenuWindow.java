@@ -69,6 +69,11 @@ public class MainMenuWindow extends Stage
 		this.setScene(sceneMenu);
 	}
 	
+	public void setLevelSelectScene()
+	{
+		this.setScene(sceneLevelSelect);
+	}
+	
 	private void initializeMenuScene()
 	{
 		Pane menuContentPane = new Pane();
