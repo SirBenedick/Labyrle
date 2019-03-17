@@ -1,15 +1,11 @@
 package logic;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-
 import logic.utility.Color;
-import logic.utility.Dijkstra;
 import logic.utility.Dijkstra;
 import logic.utility.Tile;
 import logic.utility.TileInformation;
@@ -71,14 +67,18 @@ public class Tilemap
 	
 	public void setTileColor(int x, int y, Color c)
 	{
-		//Do not draw if there is an entity
+		if (tiles[x][y].getColor() != Color.NONE)
+			return;
+		
+		setTileColorForce(x, y, c);
+	}
+	
+	public void setTileColorForce(int x, int y, Color c)
+	{
 		if (isEntity(x, y))
 			return;
 		
 		if (tiles[x][y].getType() == TileType.WALL)
-			return;
-		
-		if (tiles[x][y].getColor() != Color.NONE)
 			return;
 		
 		tiles[x][y].setColor(c);
@@ -460,7 +460,7 @@ public class Tilemap
 		for (int x = 0; x < getWidth(); x++)
 		{
 			for (int y = 0; y < getHeight(); y++)
-				this.setTileColor(x, y, Color.NONE);
+				this.setTileColorForce(x, y, Color.NONE);
 		}
 	}
 }

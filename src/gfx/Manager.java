@@ -50,6 +50,8 @@ public class Manager
 	private static Image flare;
 	private static Image icon;
 	private static Image backButton;
+	private static Image exitButton;
+	private static Image clearButton;
 	private static Image mainMenuBackground;
 	private static Image levelSelectBackground;
 	private static Image endPoint;
@@ -77,6 +79,8 @@ public class Manager
 		
 		mainMenuBackground = new Image("gfx/Menu_ohne_Knopf.png");
 		backButton = new Image("gfx/back_to_main.png");
+		exitButton = new Image("gfx/ExitBtn.png");
+		clearButton = new Image("gfx/ClearBtn.png");
 		
 		manualBackground = new Background[5];
 		for(int i = 0; i < manualBackground.length; i++)
@@ -160,6 +164,16 @@ public class Manager
 		SnapshotParameters params = new SnapshotParameters();
 		params.setFill(Color.TRANSPARENT);
 		return worker.snapshot(params, null);
+	}
+	
+	public static Image getClearButton()
+	{
+		return clearButton;
+	}
+	
+	public static Image getExitButton()
+	{
+		return exitButton;
 	}
 	
 	public static Image getBackButton()

@@ -18,30 +18,30 @@ import logic.Tilemap;
 
 public class MainMenuWindow extends Stage
 {
-	private final double LVL_OFFSET_X = 60;
-	private final double LVL_OFFSET_Y = 120;
-	private final double BACK_BTN_OFFSET_X = 690;
-	private final double BACK_BTN_OFFSET_Y = 510;
-	private final double BACK_BTN_WIDTH = 100;
-	private final double BACK_BTN_HIGHT = 75;
-	private final double SWITCH_OFFSET_X = 550;
-	private final double SWITCH_OFFSET_Y = 350;
-	private final double SWITCH_WIDTH = 150;
-	private final double SWITCH_HIGHT = 150;
-	private final double WINDOW_HEIGHT = 650;
-	private final double WINDOW_WIDTH = 825;
-	private final double START_MIN_X = 140;
-	private final double START_MAX_X = 280;
-	private final double START_MIN_Y = 350;
-	private final double START_MAX_Y = 425;
-	private final double MANUAL_MIN_X = 315;
-	private final double MANUAL_MAX_X = 520;
-	private final double MANUAL_MIN_Y = 360;
-	private final double MANUAL_MAX_Y = 430;
-	private final int TILE_SIZE = 4;
-	private final int LVL_MARGIN = 100;
-	private final int LVL_COLUMN_COUNT = 5;
-	private final int LVL_ROW_COUNT = 4;
+	private static final double LVL_OFFSET_X = 60;
+	private static final double LVL_OFFSET_Y = 120;
+	private static final double BACK_BTN_OFFSET_X = 690;
+	private static final double BACK_BTN_OFFSET_Y = 510;
+	private static final double BACK_BTN_WIDTH = 100;
+	private static final double BACK_BTN_HIGHT = 75;
+	private static final double SWITCH_OFFSET_X = 550;
+	private static final double SWITCH_OFFSET_Y = 350;
+	private static final double SWITCH_WIDTH = 150;
+	private static final double SWITCH_HIGHT = 150;
+	private static final double WINDOW_HEIGHT = 650;
+	private static final double WINDOW_WIDTH = 825;
+	private static final double START_MIN_X = 140;
+	private static final double START_MAX_X = 280;
+	private static final double START_MIN_Y = 350;
+	private static final double START_MAX_Y = 425;
+	private static final double MANUAL_MIN_X = 315;
+	private static final double MANUAL_MAX_X = 520;
+	private static final double MANUAL_MIN_Y = 360;
+	private static final double MANUAL_MAX_Y = 430;
+	private static final int TILE_SIZE = 4;
+	private static final int LVL_MARGIN = 100;
+	private static final int LVL_COLUMN_COUNT = 5;
+	private static final int LVL_ROW_COUNT = 4;
 	
 	private boolean switchOn = true;
 	private MainMenuWindow window;
@@ -198,6 +198,7 @@ public class MainMenuWindow extends Stage
 				event.consume();
 			}
 		});
+		
 		int lvlCounter = 0;
 		for(int i = 0; i < LVL_ROW_COUNT; i++)
 		{
