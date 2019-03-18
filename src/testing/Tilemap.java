@@ -11,6 +11,6 @@ public class Tilemap
 		t.saveToFile("test.bin");
 		
 		t = logic.Tilemap.makeTestMap();
-		t.loadFromFile("test.bin");
+		t.loadFromArchive("test.bin");
 	}
 }

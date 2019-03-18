@@ -1,5 +1,6 @@
 package logic;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -382,10 +383,20 @@ public class Tilemap
 		out.close();
 	}
 
+	public void loadFromArchive(String path) throws Exception
+	{
+		InputStream in = getClass().getClassLoader().getResourceAsStream(path);
+		loadFromStream(in);
+	}
+	
 	public void loadFromFile(String path) throws Exception
 	{
-		System.out.println(path);
-		InputStream in = getClass().getClassLoader().getResourceAsStream(path);
+		InputStream in = new FileInputStream(path);
+		loadFromStream(in);
+	}
+	
+	public void loadFromStream(InputStream in) throws Exception
+	{
 		byte[] validation_header = new byte[2];
 
 		// Read file id

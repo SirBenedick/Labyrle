@@ -49,7 +49,7 @@ public class GameState
 		for (int i = 0; i < maps.length; i++)
 		{
 			maps[i] = new Tilemap();
-			maps[i].loadFromFile(Defaults.LABYRINTH_DIRECTORY+"/"+Defaults.LABYRINTH_BASE_NAME+""+i+""+Defaults.LABYRINTH_EXTENSION);
+			maps[i].loadFromArchive(Defaults.LABYRINTH_DIRECTORY+"/"+Defaults.LABYRINTH_BASE_NAME+""+i+""+Defaults.LABYRINTH_EXTENSION);
 		}
 	}
 	
