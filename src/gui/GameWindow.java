@@ -34,11 +34,9 @@ public class GameWindow extends Stage
         {
         	window.renderer.getMap().clearColors();
 			window.renderer.drawMap();
-			//ToDo: LvlCounter ggf erhöhen
         }
         else
         {
-        	//ToDo: lvlCounter ggf erhöhen
         	MainMenuWindow wd = new MainMenuWindow();
         	wd.setLevelSelectScene();
         	wd.show();
@@ -231,7 +229,6 @@ public class GameWindow extends Stage
 				event.consume();
 			}
 		});
-
 	}
 	
 	private void applyOffsetToSelection(int offsetX, int offsetY)
@@ -253,6 +250,8 @@ public class GameWindow extends Stage
 			renderer.getMap().setTileColor(renderer.getSelectedX(), renderer.getSelectedY(), selectedColor);
 			if (renderer.getMap().isSolved())
 			{
+				if((GameState.getCurrentLevel()-1) == GameState.getUnlockedLevel())
+					GameState.setUnlockedLevel(GameState.getUnlockedLevel()+1);
 				showVictoryDialog();
 			}
 		}

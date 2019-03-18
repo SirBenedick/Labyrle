@@ -1,10 +1,7 @@
 package logic;
 
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -145,5 +142,10 @@ public class GameState
 	public static void load() throws Exception
 	{
 		loadFromFile(Defaults.SAVE_GAME_FILE);
+	}
+
+	public static void setUnlockedLevel(int i)
+	{
+		unlockedLevel = i;
 	}
 }
