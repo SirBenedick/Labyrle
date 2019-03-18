@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -23,23 +24,33 @@ public class GameWindow extends Stage
 {
 	private void showVictoryDialog() 
 	{
-        Alert alert = new Alert(AlertType.CONFIRMATION);
+		ButtonType yesButton = new ButtonType("Ja", ButtonData.OK_DONE);
+		ButtonType noButton = new ButtonType("Nein", ButtonData.CANCEL_CLOSE);
+        Alert alert = new Alert(AlertType.CONFIRMATION, null, yesButton, noButton);
         alert.setTitle("Herzlichen Glückwunsch!");
  
         alert.setHeaderText("Du hast das Labyrinth gelöst");
         alert.setContentText("Möchtest du noch es einmal lösen?");
  
         Optional<ButtonType> result = alert.showAndWait();
-        if(result.get() == ButtonType.OK)
+        if(result.get().getButtonData() == ButtonData.OK_DONE)
         {
         	window.renderer.getMap().clearColors();
 			window.renderer.drawMap();
         }
         else
         {
-        	MainMenuWindow wd = new MainMenuWindow();
-        	wd.setLevelSelectScene();
-        	wd.show();
+        	if(GameState.getCurrentLevel()+1 > 19)
+        	{
+        		MainMenuWindow wd = new MainMenuWindow();
+        		wd.setLevelSelectScene();
+        		wd.show();
+        	}
+        	else
+        	{
+            	GameState.setLevel(GameState.getCurrentLevel()+1);
+            	new GameWindow().show();
+        	}
 			window.close();
         }
     }
@@ -189,14 +200,16 @@ public class GameWindow extends Stage
 			{
 				if(event.getButton() == MouseButton.PRIMARY)
 				{
-					Alert exitAlert = new Alert(AlertType.CONFIRMATION);
+					ButtonType yesButton = new ButtonType("Ja", ButtonData.OK_DONE);
+					ButtonType noButton = new ButtonType("Nein", ButtonData.CANCEL_CLOSE);
+					Alert exitAlert = new Alert(AlertType.CONFIRMATION, null, yesButton, noButton);
 			        exitAlert.setTitle("Level beenden?");
 			 
 			        exitAlert.setHeaderText("Du bist in einem laufenden Spiel");
 			        exitAlert.setContentText("Sicher, dass du das Level beenden möchtest?\nJeglicher Fortschritt geht verloren.\n");
 			 
 			        Optional<ButtonType> result = exitAlert.showAndWait();
-			        if(result.get() == ButtonType.OK)
+			        if(result.get().getButtonData() == ButtonData.OK_DONE)
 			        {
 						new MainMenuWindow().show();
 						window.close();
