@@ -56,6 +56,7 @@ public class GameState
 	public static Tilemap getMap(int level)
 	{
 		maps[level].clearColors();
+		maps[level].clearUndoStack();
 		return maps[level];
 	}
 	

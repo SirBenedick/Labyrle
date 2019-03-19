@@ -1,6 +1,6 @@
 package logic.utility;
 
-public class Tile
+public class Tile implements Cloneable
 {
 	private TileType type;
 	private Color color;
@@ -18,6 +18,11 @@ public class Tile
 		this.type = type;
 		this.color = color;
 		this.target = target;
+	}
+	
+	public Tile clone()
+	{
+		return new Tile(type, color, target);
 	}
 	
 	public void setColor(Color color)

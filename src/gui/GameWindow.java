@@ -92,11 +92,15 @@ public class GameWindow extends Stage
 			Defaults.TILE_SIZE*logic.Defaults.LabyrinthHeight, 
 			GameState.getMap(GameState.getCurrentLevel())
 		);
-		
 		renderer.getSettings().setShadowOpacity(GameState.getSettings().getShadowOpacity());
 		renderer.setTranslateX(50);
 		renderer.setTranslateY(125);
 		rootLayout.getChildren().add(renderer);
+		
+		renderer.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent e) ->
+		{
+			renderer.getMap().pushUndo();
+		});
 		
 		renderer.addEventHandler(MouseEvent.MOUSE_DRAGGED, 
 		(MouseEvent e) ->
@@ -111,6 +115,7 @@ public class GameWindow extends Stage
 		{
 			renderer.setRenderSelectionHL(false);
 			applyPaint(e.getButton() == MouseButton.PRIMARY);
+			//renderer.getMap().pushUndo();
 			renderer.drawMap();
 		});
 		
@@ -124,7 +129,7 @@ public class GameWindow extends Stage
 		this.setScene(mainScene);
 		
 		mainScene.setOnKeyReleased((KeyEvent e) ->
-		{			
+		{
 			if (e.getCode() == KeyCode.UP)
 				applyOffsetToSelection(0, -1);
 			else if(e.getCode() == KeyCode.DOWN)
@@ -157,7 +162,6 @@ public class GameWindow extends Stage
 				applyPaint(false);
 		});
 		
-		renderer.drawGrid();
 		this.getIcons().add(gfx.Manager.getIcon());
 		this.setResizable(false);
 		this.setWidth(WINDOW_WIDTH);
@@ -169,21 +173,12 @@ public class GameWindow extends Stage
 		undoBtn.setMinSize(UNDO_BTN_WIDTH, UNDO_BTN_HIGHT);
 		undoBtn.setTranslateX(UNDO_BTN_OFFSET_X);
 		undoBtn.setTranslateY(UNDO_BTN_OFFSET_Y);
-		rootLayout.getChildren().add(undoBtn);
-		
-		undoBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>()
+		undoBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent e) ->
 		{
-			@Override
-			public void handle(MouseEvent event)
-			{
-				if(event.getButton() == MouseButton.PRIMARY)
-				{
-					//ToDo undoFunction call
-				}
-				
-				event.consume();
-			}
+			renderer.getMap().undo();
+			renderer.drawMap();
 		});
+		rootLayout.getChildren().add(undoBtn);
 		
 		Label exitBtn = new Label();
 		exitBtn.setGraphic(new ImageView(gfx.Manager.getExitButton()));
@@ -235,6 +230,7 @@ public class GameWindow extends Stage
 			{
 				if(event.getButton() == MouseButton.PRIMARY)
 				{
+					window.renderer.getMap().pushUndo();
 					window.renderer.getMap().clearColors();
 					window.renderer.drawMap();
 				}
@@ -242,6 +238,8 @@ public class GameWindow extends Stage
 				event.consume();
 			}
 		});
+		
+		renderer.activateRevelation();
 	}
 	
 	private void applyOffsetToSelection(int offsetX, int offsetY)

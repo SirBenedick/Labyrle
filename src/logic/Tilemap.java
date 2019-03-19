@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+
 import logic.utility.Color;
 import logic.utility.Dijkstra;
 import logic.utility.Tile;
@@ -59,10 +61,15 @@ public class Tilemap
 	 */
 	private ArrayList<TileInformation> passPoints;
 	
+	/*
+	 * Faster to just save the whole map instead of deltas, since maps are pretty small in ram
+	 */
+	private LinkedList<Tile[][]> undoMapStack;
 	
 	public Tilemap()
 	{
 		clear();
+		clearUndoStack();
 		passPoints = new ArrayList<TileInformation>();
 	}
 	
@@ -95,6 +102,69 @@ public class Tilemap
 			{
 				if (tiles[x][y].getTarget() != Color.NONE)
 					passPoints.add(new TileInformation(tiles[x][y], x, y));
+			}
+		}
+	}
+	
+	public void clearUndoStack()
+	{
+		undoMapStack = new LinkedList<Tile[][]>();
+	}
+	
+	public void pushUndo()
+	{
+		Tile[][] tileCopy = new Tile[getWidth()][getHeight()];
+		for (int x = 0; x < this.getWidth(); x++)
+		{
+			for (int y = 0; y < this.getHeight(); y++)
+				tileCopy[x][y] = (Tile) tiles[x][y].clone();
+		}
+		
+		if (undoMapStack.size() > 0)
+		{
+			boolean difference_found = false;
+			
+			for (int x = 0; x < this.getWidth(); x++)
+			{
+				for (int y = 0; y < this.getHeight(); y++)
+				{
+					if (!undoMapStack.getFirst()[x][y].equals(tileCopy[x][y]))
+					{
+						difference_found = true;
+						break;
+					}
+				}
+				
+				if (difference_found)
+					break;
+			}
+			
+			//Do not add to list
+			if (!difference_found)
+				return;
+		}
+		
+		if (undoMapStack.size() >= Defaults.MAX_UNDO_STEPS)
+			undoMapStack.removeLast();
+		
+		undoMapStack.addFirst(tileCopy);
+	}
+
+	public void undo()
+	{
+		//We are in the first map state (no colors set!)
+		if (undoMapStack.size() == 0)
+			return;
+		
+		//Apply old state if present
+		Tile[][] order = undoMapStack.pop();
+		for (int x = 0; x < this.getWidth(); x++)
+		{
+			for (int y = 0; y < this.getHeight(); y++)
+			{
+				tiles[x][y].setColor(order[x][y].getColor());
+				tiles[x][y].setTarget(order[x][y].getTarget());
+				tiles[x][y].setType(order[x][y].getType());
 			}
 		}
 	}
@@ -318,18 +388,25 @@ public class Tilemap
 				return false;
 		}
 		
-		//Check if all required passpoints are connected as well.
+		//Check if all required passpoints are connected as well, with finish OR start.
 		for (Iterator<TileInformation> iter = passPoints.iterator(); iter.hasNext(); )
 		{
 			TileInformation passPoint = iter.next();
-			if (
-					!Dijkstra.isValidPath
-					(
-							this, 
-							this.getStartPoints()[passPoint.getTile().getColor().ordinal()], 
-							passPoint
-					)
-				)
+			boolean isConnectedToStart = Dijkstra.isValidPath
+			(
+					this, 
+					this.getStartPoints()[passPoint.getTile().getColor().ordinal()], 
+					passPoint
+			);
+			
+			boolean isConnectedToEndPoint = Dijkstra.isValidPath
+			(
+					this,
+					passPoint,
+					getEndPoint()
+			);
+			
+			if (!isConnectedToStart && !isConnectedToEndPoint)
 				return false;
 		}
 		

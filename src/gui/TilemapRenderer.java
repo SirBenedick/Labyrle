@@ -1,5 +1,7 @@
 package gui;
 
+import com.sun.glass.ui.Application;
+
 import gfx.Manager;
 import gui.utility.ConnectionMatrix;
 import gui.utility.ConnectionType;
@@ -19,19 +21,16 @@ public class TilemapRenderer extends Canvas
 	private Tilemap map;
 	private ConnectionType[][] typeMatrix;
 	private boolean showGrid;
-	
 	private int tileSize;
-	
 	private int selectedTileX, oldX;
 	private int selectedTileY, oldY;
-	
 	private int absoluteCursorX, absoluteCursorY;
-	
 	private boolean isBlocked;
-	
 	private Settings settings;
-	
 	private boolean renderSelectionHL;
+	
+	private Thread revealThread;
+	private volatile boolean revelationRunning;
 	
 	public TilemapRenderer(int width, int height, Tilemap map)
 	{
@@ -70,6 +69,48 @@ public class TilemapRenderer extends Canvas
 		});
 		
 		drawMap();
+	}
+	
+	public void activateRevelation()
+	{
+		if (getSettings().getShadowOpacity() <= 0.01f)
+			return;
+		
+		if (revelationRunning)
+			revealThread.interrupt();
+		
+		final float oldOpacity = getSettings().getShadowOpacity();
+		revelationRunning = true;
+		getSettings().setShadowOpacity(0.0f);;
+		revealThread = new Thread(()->
+		{
+			try
+			{
+				Thread.sleep(Defaults.REVELATION_TIME_MS);
+				int wait_time_ms = Defaults.REVELATION_FADE_OUT_MS / Defaults.REVELATION_FADE_OUT_STEPS;
+				float step_increment = oldOpacity / Defaults.REVELATION_FADE_OUT_STEPS;
+				
+				for (int i = 0; i < Defaults.REVELATION_FADE_OUT_STEPS; i++)
+				{
+					getSettings().setShadowOpacity( getSettings().getShadowOpacity()+step_increment );
+					Application.invokeAndWait(() -> 
+					{
+						drawMap();
+					});
+					Thread.sleep(wait_time_ms);
+				}
+			}
+			//On interrupt
+			catch(Exception e)
+			{
+				//Nothing
+			}
+			finally
+			{
+				revelationRunning = false;
+			}
+		});
+		revealThread.start();
 	}
 	
 	public void setRenderSelectionHL(boolean value)

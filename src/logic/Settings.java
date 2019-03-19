@@ -8,21 +8,16 @@ public class Settings
 	private Tilemap map;
 
 	/*
-	 * The delay before hiding the map in milliseconds
-	 */
-	private int delayBeforeHidingMap;
-
-	/*
 	 * The scaling factore of the illumination. value from 0.0 to 5.0, while 0.0 is
 	 * completely hidden
 	 */
-	private float illuminationScale;
+	private volatile float illuminationScale;
 
 	/*
 	 * The opacity of the mask layed over the map when it is hidden. value from 0.0
 	 * to 1.0, while 0.0 is disabling the mask.
 	 */
-	private float shadowOpacity;
+	private volatile  float shadowOpacity;
 	
 	public Settings()
 	{
@@ -60,7 +55,6 @@ public class Settings
 	
 	public void applyDefault()
 	{
-		delayBeforeHidingMap = Defaults.DELAY_BEFORE_HIDING_MAP;
 		illuminationScale = Defaults.ILLUMINATION_SCALE;
 		shadowOpacity = Defaults.SHADOW_OPACITY;
 	}
@@ -75,8 +69,4 @@ public class Settings
 		return illuminationScale;
 	}
 	
-	public int getDelayBeforeHidingMap()
-	{
-		return delayBeforeHidingMap;
-	}
 }
