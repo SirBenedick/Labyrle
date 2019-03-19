@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 
 public class Manager 
 {
+	private static final int MAX_MANUAL_PAGES = 8;
 	private static final int MAX_LEVEL_COUNT = 20;
 	private static BackgroundImage[] backgroundImageGame;
 	
@@ -82,7 +83,7 @@ public class Manager
 		exitButton = new Image("gfx/ExitBtn.png");
 		clearButton = new Image("gfx/ClearBtn.png");
 		
-		manualBackground = new Background[5];
+		manualBackground = new Background[MAX_MANUAL_PAGES];
 		for(int i = 0; i < manualBackground.length; i++)
 		{
 			manualBackground[i] = new Background(new BackgroundImage(
