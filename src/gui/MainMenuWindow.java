@@ -153,7 +153,6 @@ public class MainMenuWindow extends Stage
 		
 		manualContentPane.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>()
 		{
-
 			@Override
 			public void handle(MouseEvent event)
 			{	
@@ -228,9 +227,12 @@ public class MainMenuWindow extends Stage
 					{
 						if(event.getButton() == MouseButton.PRIMARY)
 						{
-							GameState.setLevel(level);
-							new GameWindow().show();
-							window.close();
+							if(level < GameState.getUnlockedLevel())
+							{
+								GameState.setLevel(level);
+								new GameWindow().show();
+								window.close();
+							}
 						}
 						event.consume();
 					}

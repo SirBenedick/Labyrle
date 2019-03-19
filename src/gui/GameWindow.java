@@ -261,8 +261,18 @@ public class GameWindow extends Stage
 			renderer.getMap().setTileColor(renderer.getSelectedX(), renderer.getSelectedY(), selectedColor);
 			if (renderer.getMap().isSolved())
 			{
-				if((GameState.getCurrentLevel()-1) == GameState.getUnlockedLevel())
+				if((GameState.getCurrentLevel() + 1) == GameState.getUnlockedLevel())
 					GameState.setUnlockedLevel(GameState.getUnlockedLevel()+1);
+				try
+				{
+					GameState.save();
+				} catch (Exception e)
+				{
+					Alert saveAlert = new Alert(AlertType.ERROR);
+			        saveAlert.setTitle("Speicherfehler!");			 
+			        saveAlert.setHeaderText("Der Fortschritt konnte nicht gespeichert werden!");			 
+			        saveAlert.showAndWait();
+				}
 				showVictoryDialog();
 			}
 		}
