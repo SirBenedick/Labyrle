@@ -210,6 +210,8 @@ public class MainMenuWindow extends Stage
 			{
 				Tilemap map = GameState.getMap(lvlCounter);
 				TilemapRenderer lvl = new TilemapRenderer(map.getWidth() * TILE_SIZE, map.getHeight() * TILE_SIZE, map);
+				if (lvlCounter >= GameState.getUnlockedLevel())
+					lvl.setBlocked(true);
 				lvl.getSettings().setShadowOpacity(0.5f);
 				lvl.setTileSize(TILE_SIZE);
 				lvl.setTranslateX(LVL_OFFSET_X + LVL_MARGIN * j);

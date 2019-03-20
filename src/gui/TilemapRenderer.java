@@ -168,9 +168,6 @@ public class TilemapRenderer extends Canvas
 	
 	private void handleMove(MouseEvent e, boolean forceRedrawOnValidCoordinates)
 	{
-		if (isBlocked)
-			return;
-
 		absoluteCursorX = (int)e.getX();
 		absoluteCursorY = (int)e.getY();
 		
@@ -420,6 +417,9 @@ public class TilemapRenderer extends Canvas
 			context.setStroke(Color.RED);
 			context.strokeRect(selectedTileX*tileSize, selectedTileY*tileSize, tileSize, tileSize);
 		}
+		
+		if (isBlocked)
+			context.drawImage(gfx.Manager.getLock(), getWidth()/2 - gfx.Manager.getLock().getWidth()/2, getHeight()/2 - gfx.Manager.getLock().getHeight()/2);
 		
 		context.restore();
 	}

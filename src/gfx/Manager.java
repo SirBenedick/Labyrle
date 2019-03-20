@@ -33,6 +33,8 @@ public class Manager
 	private static Image wallTurnBottomLeft;
 	private static Image wallNone;
 	
+	private static Image lock;
+	
 	private static Image[] lineJunction;
 	private static Image[] lineLineVertical;
 	private static Image[] lineLineHorizontal;
@@ -78,6 +80,7 @@ public class Manager
 			);
 		}
 		
+		lock = new Image("gfx/lock.png");
 		mainMenuBackground = new Image("gfx/Menu_ohne_Knopf.png");
 		backButton = new Image("gfx/back_to_main.png");
 		exitButton = new Image("gfx/ExitBtn.png");
@@ -165,6 +168,11 @@ public class Manager
 		SnapshotParameters params = new SnapshotParameters();
 		params.setFill(Color.TRANSPARENT);
 		return worker.snapshot(params, null);
+	}
+	
+	public static Image getLock()
+	{
+		return lock;
 	}
 	
 	public static Image getClearButton()
