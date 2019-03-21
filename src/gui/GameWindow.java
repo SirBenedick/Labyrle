@@ -30,7 +30,7 @@ public class GameWindow extends Stage
         alert.setTitle("Herzlichen Glückwunsch!");
  
         alert.setHeaderText("Du hast das Labyrinth gelöst");
-        alert.setContentText("Möchtest du noch es einmal lösen?");
+        alert.setContentText("Möchtest du es noch einmal lösen?");
  
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get().getButtonData() == ButtonData.OK_DONE)
