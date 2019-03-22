@@ -14,3 +14,5 @@ She liked the idea thus we began prototyping the core of your game. Iterating th
 ![](https://media.giphy.com/media/klyEeXVTPpyTyBvzNe/giphy.gif)
 
 Game art by Alena Rosler, Instagram: @heart_like_a_panda
+
+Feel free to download the 'Labyrle.jar' and try it out. Enojy!!!
