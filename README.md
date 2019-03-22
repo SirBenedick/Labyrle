@@ -15,4 +15,4 @@ She liked the idea thus we began prototyping the core of your game. Iterating th
 
 Game art by Alena Rosler, Instagram: @heart_like_a_panda
 
-Feel free to download the 'Labyrle.jar' and try it out. Enojy!!!
+Feel free to download the '[Labyrle.jar](https://github.com/SirBenedick/Labyrle/blob/master/Labyrle.jar?raw=true)' and try it out. Enojy!!!
