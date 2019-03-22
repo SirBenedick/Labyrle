@@ -13,4 +13,4 @@ She liked the idea thus we began prototyping the core of your game. Iterating th
 
 ![](https://media.giphy.com/media/klyEeXVTPpyTyBvzNe/giphy.gif)
 
-Designed by Alena Rosler, Instagram: @heart_like_a_panda
+Game art by Alena Rosler, Instagram: @heart_like_a_panda
