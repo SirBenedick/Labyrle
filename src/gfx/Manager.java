@@ -1,5 +1,6 @@
 package gfx;
 
+import gui.Defaults;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
@@ -59,10 +60,13 @@ public class Manager
 	private static Image levelSelectBackground;
 	private static Image endPoint;
 	private static Image switchOn, switchOff;
+	
+	
 
 	//Multi Color Images
 	private static Image[] passPoint;
 	private static Image[] startPoint;
+	private static Image[] cursor;
 	
 	public static void loadImages() throws Exception
 	{
@@ -79,6 +83,11 @@ public class Manager
 				new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)
 			);
 		}
+		
+		cursor = new Image[4];
+		Image cursor_temp = new Image("gfx/cursor.png");
+		for (int i = 0; i < 4; i++)
+			cursor[i] = colorize(cursor_temp, Defaults.COLOR_TABLE[i]);
 		
 		lock = new Image("gfx/lock.png");
 		mainMenuBackground = new Image("gfx/Menu_ohne_Knopf.png");
@@ -168,6 +177,11 @@ public class Manager
 		SnapshotParameters params = new SnapshotParameters();
 		params.setFill(Color.TRANSPARENT);
 		return worker.snapshot(params, null);
+	}
+	
+	public static Image getCursor(logic.utility.Color c)
+	{
+		return cursor[c.ordinal()];
 	}
 	
 	public static Image getLock()

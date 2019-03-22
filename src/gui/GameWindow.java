@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import gfx.Manager;
 import javafx.event.EventHandler;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -19,40 +20,30 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import logic.GameState;
+import logic.utility.Color;
 
 public class GameWindow extends Stage
 {
 	private void showVictoryDialog() 
 	{
-		ButtonType yesButton = new ButtonType("Ja", ButtonData.OK_DONE);
-		ButtonType noButton = new ButtonType("Nein", ButtonData.CANCEL_CLOSE);
-        Alert alert = new Alert(AlertType.CONFIRMATION, null, yesButton, noButton);
-        alert.setTitle("Herzlichen Glückwunsch!");
- 
-        alert.setHeaderText("Du hast das Labyrinth gelöst");
-        alert.setContentText("Möchtest du es noch einmal lösen?");
- 
-        Optional<ButtonType> result = alert.showAndWait();
-        if(result.get().getButtonData() == ButtonData.OK_DONE)
+		Alert info = new Alert(AlertType.INFORMATION);
+		info.setTitle("Sieg!");
+		info.setHeaderText(null);
+		info.setContentText("Glückwunsch! Du hast dieses Level geschafft!");
+		info.showAndWait();
+		
+        if(GameState.getCurrentLevel()+1 > 19)
         {
-        	window.renderer.getMap().clearColors();
-			window.renderer.drawMap();
+        	MainMenuWindow wd = new MainMenuWindow();
+        	wd.setLevelSelectScene();
+        	wd.show();
         }
         else
         {
-        	if(GameState.getCurrentLevel()+1 > 19)
-        	{
-        		MainMenuWindow wd = new MainMenuWindow();
-        		wd.setLevelSelectScene();
-        		wd.show();
-        	}
-        	else
-        	{
-            	GameState.setLevel(GameState.getCurrentLevel()+1);
-            	new GameWindow().show();
-        	}
-			window.close();
+           	GameState.setLevel(GameState.getCurrentLevel()+1);
+           	new GameWindow().show();
         }
+		this.close();
     }
 	
 	private GameWindow window;
@@ -239,6 +230,7 @@ public class GameWindow extends Stage
 			}
 		});
 		
+		mainScene.setCursor(new ImageCursor(gfx.Manager.getCursor(selectedColor)));
 		renderer.activateRevelation();
 	}
 	
@@ -248,6 +240,7 @@ public class GameWindow extends Stage
 		renderer.setSelectedTile(renderer.getSelectedX()+offsetX, renderer.getSelectedY()+offsetY);
 	}
 	
+	private logic.utility.Color oldColor = Color.COLOR0;
 	private void applyPaint(boolean isPrimaryKey)
 	{
 		if (isPrimaryKey)
@@ -255,6 +248,9 @@ public class GameWindow extends Stage
 			if (renderer.getMap().isStartPoint(renderer.getSelectedX(), renderer.getSelectedY()))
 			{
 				selectedColor = renderer.getSelectedTile().getColor();
+				if (oldColor != selectedColor)
+					mainScene.setCursor(new ImageCursor(gfx.Manager.getCursor(selectedColor)));
+				oldColor = selectedColor;
 				return;
 			}
 			
